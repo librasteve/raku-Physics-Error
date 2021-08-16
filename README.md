@@ -3,7 +3,7 @@ some code to handle physical errors
 
 
 look at the top left of your keyboard...
-... there's probably a key marked ±
+... there's probably a key marked '±'
 
 this module lets you write something like:
 * 0.5±0.01
