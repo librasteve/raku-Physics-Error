@@ -1,6 +1,8 @@
 # raku-Physics-Error
 some code to handle physical measurement errors (hopefully it has nothing to do with programming error§!)
 
+WORK IN PROGRESS
+
 look at the top left of your keyboard...
 ... there's probably a key marked '±'
 
