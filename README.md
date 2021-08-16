@@ -21,7 +21,7 @@ then you can go:
 things to consider:
 * reducing a list / set of measurements
 * interoperation with the raku [Stats module](https://github.com/MattOates/Stats)
-* handling precision and / or accuracy
+* delineating precision vs. accuracy
 
 in wikipedia, the topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 * this gets fairly heavy fairly quickly --- and realworld physical errors can be non-linear and accelerate rapidly
