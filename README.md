@@ -6,7 +6,7 @@ look at the top left of your keyboard...
 
 this module lets you write something like:
 * 0.5±0.01
-* 0.5±10%
+* 0.5±2.4%
 
 it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physics-Measure) and [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) modules to do this:
 * 23nm±1            (uses Physics::Measure postfix syntax)
