@@ -5,7 +5,7 @@ look at the top left of your keyboard...
 ... there's probably a key marked '±'
 
 this module lets you write something like:
-* 0.5±0.01
+* 0.5±0.012
 * 0.5±2.4%
 
 it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physics-Measure) and [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) modules to do this:
