@@ -13,12 +13,13 @@ it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physic
 * '30 mph ± 10%'    (uses ♎️ libra notation)
 
 then you can go:
-say $x.errr;       #±10%
-say $x.erra;       #3 mph
+* say $x.errr;       #±10%
+* say $x.erra;       #3 mph
 
 things to consider:
 * reducing a list / set of measurements
 * interoperation with the raku [Stats module](https://github.com/MattOates/Stats)
+* handling precision and / or accuracy
 
 in wikipedia, the topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 * this gets fairly heavy fairly quickly --- and realworld physical errors can be non-linear and accelerate rapidly
