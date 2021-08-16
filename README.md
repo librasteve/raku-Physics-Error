@@ -12,12 +12,13 @@ it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physic
 * 23nm±1            (uses Physics::Measure postfix syntax)
 * '30 mph ± 10%'    (uses ♎️ libra notation)
 
-then you can go
-say $x.error;       #±10%
-say $x.error;       #3 mph
+then you can go:
+say $x.errr;       #±10%
+say $x.erra;       #3 mph
 
-and
-
+things to consider:
+* reducing a list / set of measurements
+* interoperation with the raku [Stats module](https://github.com/MattOates/Stats)
 
 in wikipedia, the topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 * this gets fairly heavy fairly quickly --- and realworld physical errors can be non-linear and accelerate rapidly
