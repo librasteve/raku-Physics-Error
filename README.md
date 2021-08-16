@@ -1,5 +1,5 @@
 # raku-Physics-Error
-some code to handle physical errors
+some code to handle physical measurement errors (hopefully it has nothing to do with programming error§!)
 
 
 look at the top left of your keyboard...
