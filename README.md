@@ -15,8 +15,9 @@ it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physic
 * '30 mph ± 10%'    (uses ♎️ libra notation)
 
 then you can go:
-* say $x.errr;       #±10%
-* say $x.erra;       #3 mph
+* $x.error;       #<1/10> as Rat
+* $x.error.Str;   #±10% as Str 
+* $x.error.Measure;  #3 mph
 
 things to consider:
 * reducing a list / set of measurements
