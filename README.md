@@ -9,9 +9,14 @@ this module lets you write something like:
 * 0.5±10%
 
 it also works with the [Physics::Measure](https://github.com/p6steve/raku-Physics-Measure) and [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) modules to do this:
-* 23nm±1
-* 30mph±10%
+* 23nm±1            (uses Physics::Measure postfix syntax)
+* '30 mph ± 10%'    (uses ♎️ libra notation)
 
+then you can go
+say $x.error;       #±10%
+say $x.error;       #3 mph
+
+and
 
 
 in wikipedia, the topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
