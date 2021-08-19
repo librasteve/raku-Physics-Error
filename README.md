@@ -19,6 +19,9 @@ then you can go:
 * $x.error.Str;   #±10% as Str 
 * $x.error.Measure;  #3 mph
 
+Conceptually 'Length = 12.5 ±0.05 m' && Length = 12.5nm ±[1.25nm|1.25|10%]   (FIXME v2 will implement errors)
+viz. https://www.mathsisfun.com/measure/error-measurement.html
+
 things to consider:
 * reducing a list / set of measurements
 * interoperation with the raku [Stats module](https://github.com/MattOates/Stats)
