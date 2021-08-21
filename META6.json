@@ -7,9 +7,7 @@
     "p6steve"
   ],
   "auth": "github:p6steve",
-  "depends": [
-    "Physics::Measure"
-  ],
+  "depends": [],
   "build-depends": [],
   "test-depends": [],
   "provides": {
