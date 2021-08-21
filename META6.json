@@ -1,19 +1,28 @@
 {
   "name": "Physics::Error",
-  "description": "Write me!",
+  "description": "some code to handle physical measurement errors (nothing to do with programming errors!)",
   "version": "0.1",
-  "perl": "6.*",
+  "perl": "6.d",
   "authors": [
-    "Write me!"
+    "p6steve"
   ],
-  "auth": "Write me!",
-  "depends": [],
+  "auth": "github:p6steve",
+  "depends": [
+    "Physics::Measure"
+  ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Physics::Error": "lib/Physics/Error.pm6"
+    "Physics::Error": "lib/Physics/Error.rakumod"
   },
   "resources": [],
-  "license": "Write me!",
-  "source-url": "Write me!"
+  "license": "Artistic-2.0",
+  "tags": [
+    "Physics",
+    "Measure",
+    "Units",
+    "Error"
+  ],
+  "api": "1",
+  "source-url": "git://github.com/p6steve/raku-Physics-Measure.git"
 }
