@@ -1,4 +1,4 @@
 #!/usr/bin/env raku
 
-say $*PERL.compiler;
+say $*RAKU.compiler;
 say "yo";
