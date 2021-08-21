@@ -1,6 +1,8 @@
 # raku-Physics-Error
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
+[![Build Status](https://app.travis-ci.com/p6steve/raku-Physics-Error.svg?branch=main)](https://app.travis-ci.com/p6steve/raku-Physics-Error)
+
 WORK IN PROGRESS
 
 look at the top left of your keyboard...
