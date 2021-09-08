@@ -11,7 +11,7 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Physics::Error": "lib/Physics/Error.rakumod"
+    "Physics::Error": "lib/Physics/Error.pm6"
   },
   "resources": [],
   "license": "Artistic-2.0",
@@ -22,5 +22,5 @@
     "Error"
   ],
   "api": "1",
-  "source-url": "git://github.com/p6steve/raku-Physics-Measure.git"
+  "source-url": "git://github.com/p6steve/raku-Physics-Error.git"
 }
