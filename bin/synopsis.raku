@@ -2,65 +2,41 @@
 
 use Physics::Error;
 
-#`[
-my Length $l = 12.5nm ±10%;
-say $l;
-]
+#Option 0
+#--------
 
-my $x = 12.5 does Error(0.5);
-
-#`[say +$x;
-say $x.^name;
-say $x + 17;
-say $x.abs-error;
-say $x.rel-error;
-say $x.rel-error.^name;
-say $x ~~ Error;
-say $x.percent-error;]
-
-my $y = 12.5e2 does Error(0.5e2);
-
-#`[
-say +$y;
-say $y.^name;
-say $y + 17;
-say $y.abs-error;
-say $y.rel-error;
-say $y.rel-error.^name;
-say $y ~~ Error;
-say $y.percent-error;
-]
+my $x = 12.5 does Error(0.5);       #Rat
+my $y = 12.5e2 does Error(0.5e2);   #Num
 
 #my $z = -$x;
 #my $z = $x + $y;
+my $z = $x + 17;
+#my $z = 17 + $y;
 #my $z = $x - $y;
+#my $z = $y - $x;
+#my $z = $x - $x;
 #my $z = $x * $y;
 #my $z = 17 * $x;
-my $z = $x / $y;
+#my $z = $x / $y;
 #my $z = 17 / $x;
 
 
 say +$z;
-say $z.^name;
-say $z + 17;
 say $z.abs-error;
 say $z.rel-error;
-say $z.rel-error.^name;
-say $z ~~ Error;
 say $z.percent-error;
-
-
-say "yo";
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 
 Option 0: Standalone Errors
 
-my $x = 12.5 but Error(0.5);
+my $x = 12.5 does Error(0.5);
 
 No opportunity for fancy slang, Grammar
 Can override math functions
+Not possible due to inability to unambiguously tighten infix sigs
+Revert back to mixins later at Measure objects?
 
 Option 1: Postfix Operator Syntax (SI Units)
 

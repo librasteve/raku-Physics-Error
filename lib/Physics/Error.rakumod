@@ -23,6 +23,11 @@ what to do if only one operand has an error
 use case 1 - apply constant gauge calibration offset
 use case 2 - apply linear gauge calibration factor
 if operand is Real, Error (abs) is zero
+
+things for v2
+- reduction operators on List/Sequence of Errors (eg. sequence of readings)
+- Standard Deviation (as a modal setting?)
+
 ]
 
 role Error is export {
@@ -32,8 +37,12 @@ role Error is export {
     method abs-error( --> Real ) { $!abs-error.abs }
 
     #other getter/setter methods are filters on abs-error value
-    method rel-error( --> Real ) { ( $!abs-error / self ).abs }
-    method percent-error( --> Str ) { "{self.rel-error * 100}%" }
+    method rel-error( --> Real ) {
+        ( self!vx !== 0 ) ?? ( $!abs-error / self ).abs !! Inf
+    }
+    method percent-error( --> Str ) {
+        "{self.rel-error * 100}%"
+    }
 
     #private helper methods
     method !ae { $.abs-error }   #shorthand alias
@@ -42,33 +51,33 @@ role Error is export {
     #viz. https://stackoverflow.com/questions/69101485/
 
     #math methods to implement operator overrides
-    method add( $right ) {
-        my $out-val = self!vx + $right!vx;
-        $out-val does Error( self!ae + $right!ae )
+    method add( $argument ) {
+        my $res-value = self!vx + $argument!vx;
+        $res-value does Error( self!ae + $argument!ae )
     }
-    method subtract( $right ) {
-        my $out-val = self!vx - $right!vx;
-        $out-val does Error( self!ae + $right!ae )
+    method subtract( $argument ) {
+        my $res-value = self!vx - $argument!vx;
+        $res-value does Error( self!ae + $argument!ae )
     }
     method negate {
-        my $out-val = - self!vx;
-        $out-val does Error( self!ae )
+        my $res-value = - self!vx;
+        $res-value does Error( self!ae )
     }
-    method multiply( $right ) {
-        my $out-val = self!vx * $right!vx;
-        $out-val does Error( ( self!re + $right!re ) * $out-val )
+    method multiply( $argument ) {
+        my $res-value = self!vx * $argument!vx;
+        $res-value does Error( ( self!re + $argument!re ) * $res-value )
     }
-    method multiply-const( Real:D $right ) {
-        my $out-val = self!vx * $right;
-        $out-val does Error( self!re * $out-val )
+    method multiply-const( Real:D $argument ) {
+        my $res-value = self!vx * $argument;
+        $res-value does Error( self!re * $res-value )
     }
-    method divide( $right ) {
-        my $out-val = self!vx / $right!vx;
-        $out-val does Error( ( self!re + $right!re ) * $out-val )
+    method divide( $argument ) {
+        my $res-value = self!vx / $argument!vx;
+        $res-value does Error( ( self!re + $argument!re ) * $res-value )
     }
     method reciprocal {
-        my $out-val = 1 / self!vx;
-        $out-val does Error( self!re * $out-val )
+        my $res-value = 1 / self!vx;
+        $res-value does Error( self!re * $res-value )
     }
 
 
@@ -124,84 +133,91 @@ sub infix-prep( $left, $right ) {
 
     my ( $result, $argument );
     if $left ~~ Error && $right ~~ Error {
+        say "a";
         $result   = $left.clone;
         $argument = $right;
-    }
-    #`[elsif $left ~~ Measure {
+    } elsif $left ~~ Error {
+        say "b";
         $result   = $left.clone;
         $argument = $left.clone.new: $right;
-    } elsif $right ~~ Measure {
+        dd $argument;
+    } elsif $right ~~ Error {
+        say "c";
         $result   = $right.clone.new: $left;
         $argument = $right.clone;
-    }]
+    }
     return( $result, $argument );
 }
 
 #math
 
-multi prefix:<-> ( Error:D $x ) is default { $x.negate }
-
-multi infix:<+> ( Error:D $left, Error:D $right ) is export {
+multi infix:<+> ( Error:D $left, Error:D $right ) is default is export {
+    say "x";
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.add( $argument );
+}
+multi infix:<+> ( Error:D $left, $right ) is default is export {
+    say "y";
+    my ( $result, $argument ) = infix-prep( $left, $right );
+    return $result.add( $argument );
+}
+multi infix:<+> ( $left, Error:D $right ) is default is export {
+    say "z";
+    my ( $result, $argument ) = infix-prep( $left, $right );
+    return $result.add( $argument );
+}
+
+multi infix:<-> ( Error:D $left, Error:D $right ) is default is export {
+    my ( $result, $argument ) = infix-prep( $left, $right );
+    return $result.subtract( $argument );
 }
 #`[
-multi infix:<+> ( Measure:D $left, $right ) is export {
+multi infix:<-> ( Measure:D $left, $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
+    return $result.subtract( $argument );
 }
-multi infix:<+> ( $left, Measure:D $right ) is export {
+multi infix:<-> ( $left, Measure:D $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
+    return $result.subtract( $argument );
 }
 #]
-multi infix:<-> ( Error:D $left, Error:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
+multi prefix:<-> ( Error:D $x ) is default is export {
+    $x.negate
 }
 #`[
-multi infix:<-> ( Measure:D $left, $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-multi infix:<-> ( $left, Measure:D $right ) is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-
-multi infix:<*> ( Measure:D $left, Real:D $right ) is export {
+multi infix:<*> ( Measure:D $left, Real:D $right ) is default is export {
     my $result   = $left.clone;
     my $argument = $right;
     return $result.multiply-const( $argument );
 }
 
-multi infix:<*> ( Real:D $left, Error:D $right ) is export {
+multi infix:<*> ( Real:D $left, Error:D $right ) is default is export {
     my $result   = $right.clone;   #iamerejh
     my $argument = $left;
     return $result.multiply-const( $argument );
 }
 #]
-multi infix:<*> ( Error:D $left, Error:D $right ) is export {
+multi infix:<*> ( Error:D $left, Error:D $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.multiply( $argument );
 }
 #`[
-multi infix:<*> ( Measure:D $left, $right ) is export {
+multi infix:<*> ( Measure:D $left, $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.multiply( $argument );
 }
-multi infix:<*> ( $left, Measure:D $right ) is export {
+multi infix:<*> ( $left, Measure:D $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.multiply( $argument );
 }
 
-multi infix:</> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is export {
+multi infix:</> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is default is export {
     my $result   = $left.clone;
     my $argument = $right;
     return $result.divide-const( $argument );
 }
 
-multi infix:</> ( Real:D $left, Error:D $right ) is equiv( &infix:</> ) is export {
+multi infix:</> ( Real:D $left, Error:D $right ) is equiv( &infix:</> ) is default is export {
     my $result   = $right.clone;
     my $argument = $left;
     my $recip = $result.reciprocal;
@@ -209,16 +225,16 @@ multi infix:</> ( Real:D $left, Error:D $right ) is equiv( &infix:</> ) is expor
 }
 #]
 
-multi infix:</> ( Error:D $left, Error:D $right ) is export {
+multi infix:</> ( Error:D $left, Error:D $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.divide( $argument );
 }
 #`[
-multi infix:</> ( Measure:D $left, $right ) is export {
+multi infix:</> ( Measure:D $left, $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.divide( $argument );
 }
-multi infix:</> ( $left, Measure:D $right ) is export {
+multi infix:</> ( $left, Measure:D $right ) is default is export {
     my ( $result, $argument ) = infix-prep( $left, $right );
     return $result.divide( $argument );
 }
