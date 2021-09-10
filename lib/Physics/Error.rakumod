@@ -30,55 +30,71 @@ things for v2
 
 ]
 
-role Error is export {
-    has Real $.abs-error;       #set public attr in does mixin
+my regex number {
+    \S+                     #grab chars
+    <?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
+}
 
-    #override getter - abs-error always +ve (using .abs method)
-    method abs-error( --> Real ) { $!abs-error.abs }
+class Error is export {
+    has Real $.absolute;
 
-    #other getter/setter methods are filters on abs-error value
-    method rel-error( --> Real ) {
-        ( self!vx !== 0 ) ?? ( $!abs-error / self ).abs !! Inf
+    #### Constructor ####
+    method new( :$error, :$value ) {
+        return unless $error;
+
+        given $error {
+            when Real {
+                return self.bless( absolute => $error.abs )
+            }
+            when /(<number>) '%'/ {
+                return self.bless( absolute => ( $0 / 100 * $value ) )
+            }
+        }
     }
-    method percent-error( --> Str ) {
-        "{self.rel-error * 100}%"
+
+    #### Getter Methods ####
+    method relative( Real $value --> Real ) {
+        ( $value !== 0 ) ?? ( $!absolute / $value ).abs !! Inf
+    }
+    method percent( Real $value --> Str ) {
+        "{self.relative( $value ) * 100}%"
     }
 
     #private helper methods
-    method !ae { $.abs-error }   #shorthand alias
-    method !re { $.rel-error }   #shorthand alias
-    method !vx { +"{self}" }     #extract unadorned value of $x
+#    method !ae { $.absolute }   #shorthand alias
+#    method !re { $.relative}   #shorthand alias
+#    method !vx { +"{self}" }     #value of caller Measure
     #viz. https://stackoverflow.com/questions/69101485/
 
     #math methods to implement operator overrides
-    method add( $argument ) {
-        my $res-value = self!vx + $argument!vx;
-        $res-value does Error( self!ae + $argument!ae )
-    }
-    method subtract( $argument ) {
-        my $res-value = self!vx - $argument!vx;
-        $res-value does Error( self!ae + $argument!ae )
-    }
-    method negate {
-        my $res-value = - self!vx;
-        $res-value does Error( self!ae )
-    }
-    method multiply( $argument ) {
-        my $res-value = self!vx * $argument!vx;
-        $res-value does Error( ( self!re + $argument!re ) * $res-value )
-    }
-    method multiply-const( Real:D $argument ) {
-        my $res-value = self!vx * $argument;
-        $res-value does Error( self!re * $res-value )
-    }
-    method divide( $argument ) {
-        my $res-value = self!vx / $argument!vx;
-        $res-value does Error( ( self!re + $argument!re ) * $res-value )
-    }
-    method reciprocal {
-        my $res-value = 1 / self!vx;
-        $res-value does Error( self!re * $res-value )
-    }
+#    method add( $argument ) {
+#        my $res-value = self!vx + $argument!vx;
+#        $res-value does Error( self!ae + $argument!ae )
+#    }
+#    method subtract( $argument ) {
+#        my $res-value = self!vx - $argument!vx;
+#        $res-value does Error( self!ae + $argument!ae )
+#    }
+#    method negate {
+#        my $res-value = - self!vx;
+#        $res-value does Error( self!ae )
+#    }
+#    method multiply( $argument ) {
+#        my $res-value = self!vx * $argument!vx;
+#        $res-value does Error( ( self!re + $argument!re ) * $res-value )
+#    }
+#    method multiply-const( Real:D $argument ) {
+#        my $res-value = self!vx * $argument;
+#        $res-value does Error( self!re * $res-value )
+#    }
+#    method divide( $argument ) {
+#        my $res-value = self!vx / $argument!vx;
+#        $res-value does Error( ( self!re + $argument!re ) * $res-value )
+#    }
+#    method reciprocal {
+#        my $res-value = 1 / self!vx;
+#        $res-value does Error( self!re * $res-value )
+#    }
 
 
     #`[
@@ -126,143 +142,3 @@ role Error is export {
 
 }
 
-sub infix-prep( $left, $right ) {
-    #clone object (e.g. Rat+{Physics::Error::Error}) as container for result
-    #mixin Error to other arg. unless already has [same, zero]
-    #don't forget to swap sides back e.g.for intransigent operations
-
-    my ( $result, $argument );
-    if $left ~~ Error && $right ~~ Error {
-        say "a";
-        $result   = $left.clone;
-        $argument = $right;
-    } elsif $left ~~ Error {
-        say "b";
-        $result   = $left.clone;
-        $argument = $left.clone.new: $right;
-        dd $argument;
-    } elsif $right ~~ Error {
-        say "c";
-        $result   = $right.clone.new: $left;
-        $argument = $right.clone;
-    }
-    return( $result, $argument );
-}
-
-#math
-
-multi infix:<+> ( Error:D $left, Error:D $right ) is default is export {
-    say "x";
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
-}
-multi infix:<+> ( Error:D $left, $right ) is default is export {
-    say "y";
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
-}
-multi infix:<+> ( $left, Error:D $right ) is default is export {
-    say "z";
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.add( $argument );
-}
-
-multi infix:<-> ( Error:D $left, Error:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-#`[
-multi infix:<-> ( Measure:D $left, $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-multi infix:<-> ( $left, Measure:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.subtract( $argument );
-}
-#]
-multi prefix:<-> ( Error:D $x ) is default is export {
-    $x.negate
-}
-#`[
-multi infix:<*> ( Measure:D $left, Real:D $right ) is default is export {
-    my $result   = $left.clone;
-    my $argument = $right;
-    return $result.multiply-const( $argument );
-}
-
-multi infix:<*> ( Real:D $left, Error:D $right ) is default is export {
-    my $result   = $right.clone;   #iamerejh
-    my $argument = $left;
-    return $result.multiply-const( $argument );
-}
-#]
-multi infix:<*> ( Error:D $left, Error:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.multiply( $argument );
-}
-#`[
-multi infix:<*> ( Measure:D $left, $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.multiply( $argument );
-}
-multi infix:<*> ( $left, Measure:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.multiply( $argument );
-}
-
-multi infix:</> ( Measure:D $left, Real:D $right ) is equiv( &infix:</> ) is default is export {
-    my $result   = $left.clone;
-    my $argument = $right;
-    return $result.divide-const( $argument );
-}
-
-multi infix:</> ( Real:D $left, Error:D $right ) is equiv( &infix:</> ) is default is export {
-    my $result   = $right.clone;
-    my $argument = $left;
-    my $recip = $result.reciprocal;
-    return $recip.multiply-const( $argument );
-}
-#]
-
-multi infix:</> ( Error:D $left, Error:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.divide( $argument );
-}
-#`[
-multi infix:</> ( Measure:D $left, $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.divide( $argument );
-}
-multi infix:</> ( $left, Measure:D $right ) is default is export {
-    my ( $result, $argument ) = infix-prep( $left, $right );
-    return $result.divide( $argument );
-}
-
-multi infix:<**> ( Measure:D $left, Int:D $right where 2..4 ) is equiv( &infix:<**> ) is export {
-    # 2(square),3(cube),4(fourth) e.g. T**4 for Boltzmann constant
-    my $result   = $left.clone;
-    my $argument = $right;
-    return $result.power( $argument );
-}
-multi infix:<**> ( Measure:D $left, Rat:D $right where (<1/2>,<1/3>,<1/4>).one ) is equiv( &infix:<**> ) is export {
-    # 1/2 (sqrt), 1/3 (curt), 1/4 (fort) - NB also method sqrt() defined in Measure Class
-    my $result   = $left.clone;
-    my $argument = ( 1 / $right ).Int;
-    return $result.root( $argument );
-}
-multi sqrt ( Measure:D $left ) is export {
-    return $left.clone.sqrt;
-}
-
-multi infix:<cmp> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<cmp> ) is export {
-    return $a.cmp( $b );
-}
-multi infix:<==> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<==> ) is export {
-    if $a.cmp( $b) ~~ Same { return True; }
-    else { return False; }
-}
-multi infix:<!=> ( Measure:D $a, Measure:D $b ) is equiv( &infix:<!=> ) is export {
-    if $a.cmp( $b) ~~ Same { return False; }
-    else { return True; }
-}]

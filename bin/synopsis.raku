@@ -1,16 +1,31 @@
 #!/usr/bin/env raku
-
-use Physics::Error;
+use Physics::Measure;
 
 #Option 0
 #--------
 
-my $x = 12.5 does Error(0.5);       #Rat
-my $y = 12.5e2 does Error(0.5e2);   #Num
+#my $x = 12.5 does Error(0.5);       #Rat
+#my $y = 12.5e2 does Error(0.5e2);   #Num
+
+#Option 1
+#--------
+
+#Option 2
+#--------
+
+#my Length $l = Length.new(value => 12.5, units => 'nm');
+#my Length $l = Length.new(value => 12.5, units => 'nm', error => 0.5);
+my Length $l = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+
+say ~$l; #42 ±4.2 nanometre
+say $l.error.absolute;
+say $l.error-relative;
+say $l.error-relative.WHAT;
+say $l.error-percent;
 
 #my $z = -$x;
 #my $z = $x + $y;
-my $z = $x + 17;
+#my $z = $x + 17;
 #my $z = 17 + $y;
 #my $z = $x - $y;
 #my $z = $y - $x;
@@ -21,15 +36,16 @@ my $z = $x + 17;
 #my $z = 17 / $x;
 
 
-say +$z;
+#`[say +$z;
 say $z.abs-error;
 say $z.rel-error;
-say $z.percent-error;
+say $z.percent-error;]
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
+#viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
 
-Option 0: Standalone Errors
+Option 0: Standalone Errors   <=== nope!
 
 my $x = 12.5 does Error(0.5);
 
@@ -58,12 +74,9 @@ my Length $l = 12.5nm ±10%;
 #12.5nm ±10% is a List of two terms, first with postfix, second with prefix
 #so can you implement via object $l taking a list? - maybe use that same lvalue thing?
 
-
-
-
 Option 2: Object Constructor Syntax
 
-my Length $l = Length.new(value => 12.5, units => 'nm', error => [4.2|10%]);
+my Length $l = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
 
 say ~$l; #42 ±4.2 nanometre
 
