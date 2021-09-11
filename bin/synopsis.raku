@@ -13,18 +13,21 @@ use Physics::Measure;
 #Option 2
 #--------
 
-#my Length $l = Length.new(value => 12.5, units => 'nm');
-#my Length $l = Length.new(value => 12.5, units => 'nm', error => 0.5);
-my Length $l = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+#my Length $x = Length.new(value => 12.5, units => 'nm');
+my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
-say ~$l; #42 ±4.2 nanometre
-say $l.error.absolute;
-say $l.error-relative;
-say $l.error-relative.WHAT;
-say $l.error-percent;
+say ~$x; #42 ±4.2 nanometre
+say $x.error.absolute;
+say $x.error-relative;
+say $x.error-percent;
+say $x.error-relative.WHAT;
+
+my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 
 #my $z = -$x;
-#my $z = $x + $y;
+my $z = $x + $y;
 #my $z = $x + 17;
 #my $z = 17 + $y;
 #my $z = $x - $y;
@@ -36,10 +39,11 @@ say $l.error-percent;
 #my $z = 17 / $x;
 
 
-#`[say +$z;
-say $z.abs-error;
-say $z.rel-error;
-say $z.percent-error;]
+say ~$z; #42 ±4.2 nanometre
+say $z.error.absolute;   #iamerejh (Measure clone / new from Measure)
+say $z.error-relative;
+say $z.error-percent;
+say $z.error-relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
@@ -56,7 +60,7 @@ Revert back to mixins later at Measure objects?
 
 Option 1: Postfix Operator Syntax (SI Units)
 
-my Length $l = 12.5nm ±10%;
+my Length $x = 12.5nm ±10%;
    ------ -- - ------ ----
       |    | |   |  |  |
       |    | |   |  |  > Rat relative error [or '±4.2%' Rat relative error]
@@ -72,18 +76,18 @@ my Length $l = 12.5nm ±10%;
       > Type (Length is Measure) ... can be omitted
 
 #12.5nm ±10% is a List of two terms, first with postfix, second with prefix
-#so can you implement via object $l taking a list? - maybe use that same lvalue thing?
+#so can you implement via object $x taking a list? - maybe use that same lvalue thing?
 
 Option 2: Object Constructor Syntax
 
-my Length $l = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
+my Length $x = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
 
-say ~$l; #42 ±4.2 nanometre
+say ~$x; #42 ±4.2 nanometre
 
 
 Option 3: Libra Shorthand Syntax
 
-my Length $l ♎️ '12.5 ±0.05 nm';
+my Length $x ♎️ '12.5 ±0.05 nm';
    ------ -- --  ---- ----- --
       |    |  |   |   |  |  |
       |    |  |   |   |  |  |

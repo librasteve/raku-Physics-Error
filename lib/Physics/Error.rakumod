@@ -28,6 +28,9 @@ things for v2
 - reduction operators on List/Sequence of Errors (eg. sequence of readings)
 - Standard Deviation (as a modal setting?)
 
+todos
+- fix make-same conversion
+
 ]
 
 my regex number {
@@ -36,11 +39,13 @@ my regex number {
 }
 
 class Error is export {
-    has Real $.absolute;
+    has Real $.absolute is rw;
 
     #### Constructor ####
     method new( :$error, :$value ) {
-        return unless $error;
+        #return Nil without defined error value
+        #Measure $.error attr remains Error:U
+        return without $error;
 
         given $error {
             when Real {
