@@ -30,6 +30,7 @@ things for v2
 
 todos
 - fix make-same conversion
+- design, implement & document application of Error to Duration
 
 ]
 
@@ -43,8 +44,7 @@ class Error is export {
 
     #### Constructor ####
     method new( :$error, :$value ) {
-        #return Nil without defined error value
-        #Measure $.error attr remains Error:U
+        #Measure $.error attr remains Error:U without defined error value
         return without $error;
 
         given $error {
