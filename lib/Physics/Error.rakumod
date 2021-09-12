@@ -59,7 +59,9 @@ class Error is export {
 
     #### Getter Methods ####
     method relative( Real $value --> Real ) {
-        ( $value !== 0 ) ?? ( $!absolute / $value ).abs !! Inf
+        return (0/0).Num if $value == 0 && $!absolute == 0;
+        return Inf if $value == 0;
+        ( $!absolute / $value ).abs
     }
     method percent( Real $value --> Str ) {
         "{self.relative( $value ) * 100}%"
