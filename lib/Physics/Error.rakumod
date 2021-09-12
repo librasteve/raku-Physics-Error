@@ -65,6 +65,8 @@ class Error is export {
         "{self.relative( $value ) * 100}%"
     }
 
+    #### Meth Methods ####
+
     #private helper methods
 #    method !ae { $.absolute }   #shorthand alias
 #    method !re { $.relative}   #shorthand alias
