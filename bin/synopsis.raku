@@ -17,7 +17,7 @@ use Physics::Measure;
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
-#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
 #say ~$x; #42 ±4.2 nanometre
 #say $x.error.absolute;
@@ -25,7 +25,7 @@ use Physics::Measure;
 #say $x.error-percent;
 #say $x.error-relative.WHAT;
 
-#my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
+my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
 
 #say $y;
 #say $y.in('nm');
@@ -46,9 +46,12 @@ use Physics::Measure;
 #say ~$t;
 #my $z = 17 / $t;
 
-my Length $w = Length.new(value => 10, units => 'm', error => '2%');
-my $z = $w ** 3;
-$z = $z ** <1/3>;
+#my Length $w = Length.new(value => 10, units => 'm', error => '2%');
+#my $z = $w ** 3;
+#$z = $z ** <1/3>;
+
+my $z = $x - $y;
+$z .= norm;
 
 say ~$z; #42 ±4.2 nanometre
 say $z.error.absolute;

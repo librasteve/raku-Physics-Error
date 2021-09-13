@@ -8,15 +8,18 @@ err.root = rel / n -DONE
 
 in -DONE
 rebase -DONE
-norm -DONE?
+norm -DONE
+cmp
 
 guard rail err > 50%
-set round to
+set round to (value and error)
+set sigfig s
 
 angle on decimal -DONE?
 trig drop Error (manual)
 
 Dimensionless for math -DONE?
+(drop (1) from say?? mode)
 
 thus
 what to do if only one operand has an error
