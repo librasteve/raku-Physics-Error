@@ -2,22 +2,21 @@ unit module Physics::Error:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 
 #`[
 err.add = abs + abs -DONE
-err.mul = rel + rel
-guard rail err > 50%
-set round to
-
+err.mul = rel + rel -DONE
 err.pwr = n x rel
 err.root = rel / n
 
-in - DONE
-rebase - DONE
-cmp
-norm
+in -DONE
+rebase -DONE
+norm -DONE?
 
+guard rail err > 50%
+set round to
 
-angle on decimal and secs?
-
+angle on decimal -DONE?
 trig drop Error (manual)
+
+Dimensionless for math -DONE?
 
 thus
 what to do if only one operand has an error
@@ -29,6 +28,7 @@ v2 backlog
 - reduction operators on List/Sequence of Errors (eg. sequence of readings)
 - Standard Deviation (as a modal setting?)
 - errors on unit definition factors
+- make divide by same-unit return Dimensionless
 
 todos
 - design, implement & document application of Error to Duration

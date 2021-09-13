@@ -16,10 +16,10 @@ use Physics::Measure;
 #my Length $x = Length.new(value => 12.5, units => 'nm');
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
-my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
-#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
+my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
-say ~$x; #42 ±4.2 nanometre
+#say ~$x; #42 ±4.2 nanometre
 #say $x.error.absolute;
 #say $x.error-relative;
 #say $x.error-percent;
@@ -38,10 +38,17 @@ my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
 #my $z = $x - $y;
 #my $z = $y - $x;
 #my $z = $x - $x;
-my $z = $x * $y;
+#my $z = $x * $y;
 #my $z = 17 * $x;
-#my $z = $x / $y;
-#my $z = 17 / $x;
+my $z = $x / $y;
+
+#my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
+#say ~$t;
+#say $t.error.absolute;
+#say $t.error-relative;
+#say $t.error-percent;
+#say $t.error-relative.WHAT;
+#my $z = 17 / $t;   #iamerejh - dmix OK?
 
 say ~$z; #42 ±4.2 nanometre
 say $z.error.absolute;   #iamerejh (Measure clone / new from Measure)
