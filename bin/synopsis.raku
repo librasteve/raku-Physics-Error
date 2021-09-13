@@ -13,11 +13,11 @@ use Physics::Measure;
 #Option 2
 #--------
 
-#my Length $x = Length.new(value => 12.5, units => 'nm');
+my Length $x = Length.new(value => 12.5, units => 'nm');
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
-my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
 #say ~$x; #42 ±4.2 nanometre
 #say $x.error.absolute;
@@ -50,14 +50,16 @@ my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
 #my $z = $w ** 3;
 #$z = $z ** <1/3>;
 
-my $z = $x - $y;
-$z .= norm;
+#my $z = $x - $y;
+#$z .= norm;
 
-say ~$z; #42 ±4.2 nanometre
-say $z.error.absolute;
-say $z.error-relative;
-say $z.error-percent;
-say $z.error-relative.WHAT;
+say $x cmp $y;
+
+#say ~$z; #42 ±4.2 nanometre
+#say $z.error.absolute;
+#say $z.error-relative;
+#say $z.error-percent;
+#say $z.error-relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
