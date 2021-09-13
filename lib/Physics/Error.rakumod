@@ -3,8 +3,8 @@ unit module Physics::Error:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 #`[
 err.add = abs + abs -DONE
 err.mul = rel + rel -DONE
-err.pwr = n x rel
-err.root = rel / n
+err.pwr = n x rel -DONE
+err.root = rel / n -DONE
 
 in -DONE
 rebase -DONE
