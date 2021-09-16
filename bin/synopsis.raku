@@ -13,10 +13,10 @@ use Physics::Measure;
 #Option 2
 #--------
 
-#my Length $x = Length.new(value => 12.5, units => 'nm');
+my Length $x = Length.new(value => 12.5, units => 'nm');
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
-my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
 say ~$x; #12.5nm ±4%
