@@ -13,13 +13,13 @@ use Physics::Measure;
 #Option 2
 #--------
 
-my Length $x = Length.new(value => 12.5, units => 'nm');
+#my Length $x = Length.new(value => 12.5, units => 'nm');
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
-#my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
+my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
-#say ~$x; #42 ±4.2 nanometre
+say ~$x; #12.5nm ±4%
 #say $x.error.absolute;
 #say $x.error-relative;
 #say $x.error-percent;
@@ -27,8 +27,9 @@ my Length $x = Length.new(value => 12.5, units => 'nm');
 
 my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
 
-#say $y;
-#say $y.in('nm');
+say ~$y; #1250μm ±4.3%
+say ~$y.in('nm');
+say ~$y.norm;
 
 #my $z = -$x;
 #my $z = $x + $y;
@@ -53,7 +54,7 @@ my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
 #my $z = $x - $y;
 #$z .= norm;
 
-say $x cmp $y;
+#say $x cmp $y;
 
 #say ~$z; #42 ±4.2 nanometre
 #say $z.error.absolute;
@@ -76,12 +77,14 @@ Revert back to mixins later at Measure objects?
 
 Option 1: Postfix Operator Syntax (SI Units)
 
-my Length $x = 12.5nm ±10%;
-   ------ -- - ------ ----
-      |    | |   |  |  |
-      |    | |   |  |  > Rat relative error [or '±4.2%' Rat relative error]
+my Length $x = 12.5nm ± 10%;
+   ------ -- - ------ - ---
+      |    | |   |  | |  |
+      |    | |   |  | |  > Rat relative error [or '±4.2%' Rat relative error]
+      |    | |   |  | |
+      |    | |   |  | > ± symbol as custom raku infix operator
       |    | |   |  |
-      |    | |   |  > 'nm' Unit constructor as custom raku postfix operator
+      |    | |   |  > 'nm' Unit constructor as custom raku postfix operator (no ws)
       |    | |   |
       |    | |   > Real number
       |    | |
@@ -98,7 +101,7 @@ Option 2: Object Constructor Syntax
 
 my Length $x = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
 
-say ~$x; #42 ±4.2 nanometre
+say ~$x; #42 ±4.2nanometre
 
 
 Option 3: Libra Shorthand Syntax

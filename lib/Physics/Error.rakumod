@@ -9,7 +9,11 @@ err.root = rel / n -DONE
 in -DONE
 rebase -DONE
 norm -DONE
-cmp
+cmp -DONE
+output % -DONE
+output abs??
+
+inputs (option 1,3)
 
 guard rail err > 50%
 set round to (value and error)
@@ -31,7 +35,6 @@ v2 backlog
 - reduction operators on List/Sequence of Errors (eg. sequence of readings)
 - Standard Deviation (as a modal setting?)
 - errors on unit definition factors
-- make divide by same-unit return Dimensionless
 
 todos
 - design, implement & document application of Error to Duration
