@@ -102,8 +102,5 @@ class Error is export {
     multi method add-rel( Error:D $r ) {
         return self.relative + $r.relative
     }
-
-
-
 }
 

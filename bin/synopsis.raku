@@ -31,10 +31,10 @@ say ~$x; #12.5nm ±4%
 #say $x.error.relative.WHAT;
 
 #my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
-my Length $y = Length.new(value => 12.5e2, units => 'μm');
+#my Length $y = Length.new(value => 12.5e2, units => 'μm');
 
 #say $y;
-say ~$y; #1250μm ±4.3%
+#say ~$y; #1250μm ±4.3%
 #say $y.error.absolute;
 #say $y.error.relative;
 #say $y.error.percent;
@@ -46,13 +46,14 @@ say ~$y; #1250μm ±4.3%
 #my $z = $x + $y;
 #my $z = $y + $x;
 #my $z = $x + 17;   #FIXME (maybe push up add/sub const and remove new from Real?)
+my $z = .2 - $x;
 #my $z = 17 + $y;
 #my $z = $x - $y;
 #my $z = $y - $x;
 #my $z = $x - $x;    #FIXME Use of uninitialized value %fact2pfix{'1e-21'}
 #my $z = $x * $y;
 #my $z = 17 * $x;
-my $z = $x / $y;
+#my $z = $x / $y;
 
 #my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
 #say ~$t;
