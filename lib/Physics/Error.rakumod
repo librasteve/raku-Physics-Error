@@ -11,13 +11,19 @@ rebase -DONE
 norm -DONE
 cmp -DONE
 output % -DONE
-output abs??
+output abs (this is default for .gist) -DONE
 
 inputs (option 1,3)
 
 guard rail err > 50%
 set round to (value and error)
 set sigfig s
+
+
+eg. value => 12.5e2, error => '4.3%' ...
+error => Physics::Error::Error.new(absolute => 53.74999999999999e0
+
+
 
 angle on decimal -DONE?
 trig drop Error (manual)
@@ -37,7 +43,12 @@ v2 backlog
 - errors on unit definition factors
 
 todos
-- design, implement & document application of Error to Duration
+- design, implement & document application of Error to Duration (if any)
+- layer in error to assignment section of Measure.rakumod
+
+document new prefix to replace assign and declaration
+- $a = ♎'39 °C';
+
 
 ]
 
@@ -48,6 +59,7 @@ my regex number {
 
 class Error is export {
     has Real $.absolute is rw;
+    has Real $!mea-value;
 
     #### Constructor ####
     method new( :$error, :$value ) {
@@ -64,17 +76,33 @@ class Error is export {
         }
     }
 
-    #### Getter Methods ####
-    method relative( Real $value --> Real ) {
-        return (0/0).Num if $value == 0 && $!absolute == 0;
-        return Inf if $value == 0;
-        ( $!absolute / $value ).abs
+    method bind-mea-value(\value) { $!mea-value := value };
+
+    #### Getters ####
+    method relative {
+        return (0/0).Num if $!mea-value == 0 && $!absolute == 0;  #makes a NaN
+        return Inf if $!mea-value == 0;
+        ( $!absolute / $!mea-value ).abs
     }
-    method percent( Real $value --> Str ) {
-        "{self.relative( $value ) * 100}%"
+    method percent {
+        "{ self.relative * 100 }%"
     }
 
-    #### Meth Methods ####
+    #### Maths Ops ####
+    multi method add-abs( Error:U ) {
+        #nop
+    }
+    multi method add-abs( Error:D $r ) {
+        self.absolute += $r.absolute
+    }
+
+    multi method add-rel( Error:U ) {
+        return self.relative
+    }
+    multi method add-rel( Error:D $r ) {
+        return self.relative + $r.relative
+    }
+
 
 
 }

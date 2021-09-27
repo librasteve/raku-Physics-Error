@@ -1,5 +1,5 @@
 #!/usr/bin/env raku
-use Physics::Measure;
+use Physics::Measure :ALL;
 
 #Option 0
 #--------
@@ -10,38 +10,49 @@ use Physics::Measure;
 #Option 1
 #--------
 
+#my Length $x = 12.5nm ± 1;
+#my Length $x = 12.5nm ± 10%;
+#my Length $x = 12.5nm;
+
 #Option 2
 #--------
 
-my Length $x = Length.new(value => 12.5, units => 'nm');
+#my Length $x = Length.new(value => 12.5, units => 'nm');
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
-#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
+#say $x;
 say ~$x; #12.5nm ±4%
 #say $x.error.absolute;
-#say $x.error-relative;
-#say $x.error-percent;
-#say $x.error-relative.WHAT;
+#say $x.error.relative;
+#say $x.error.percent;
+#say $x.error.relative.WHAT;
 
-my Length $y = Length.new(value => 12.5e2, units => 'μm', error => '4.3%');
+#my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
+my Length $y = Length.new(value => 12.5e2, units => 'μm');
 
+#say $y;
 say ~$y; #1250μm ±4.3%
-say ~$y.in('nm');
-say ~$y.norm;
+#say $y.error.absolute;
+#say $y.error.relative;
+#say $y.error.percent;
+#say $y.error.relative.WHAT;
+#say ~$y.in('nm');
+#say ~$y.norm;
 
 #my $z = -$x;
 #my $z = $x + $y;
 #my $z = $y + $x;
-#my $z = $x + 17;
+#my $z = $x + 17;   #FIXME (maybe push up add/sub const and remove new from Real?)
 #my $z = 17 + $y;
 #my $z = $x - $y;
 #my $z = $y - $x;
-#my $z = $x - $x;
+#my $z = $x - $x;    #FIXME Use of uninitialized value %fact2pfix{'1e-21'}
 #my $z = $x * $y;
 #my $z = 17 * $x;
-#my $z = $x / $y;
+my $z = $x / $y;
 
 #my Time $t = Time.new(value => 10, units => 'ms', error => '4.3%');
 #say ~$t;
@@ -56,11 +67,13 @@ say ~$y.norm;
 
 #say $x cmp $y;
 
-#say ~$z; #42 ±4.2 nanometre
+#say $z;
+say ~$z; #42 ±4.2 nanometre
+#say ~$z.norm;
 #say $z.error.absolute;
-#say $z.error-relative;
-#say $z.error-percent;
-#say $z.error-relative.WHAT;
+#say $z.error.relative;
+#say $z.error.percent;
+#say $z.error.relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
@@ -71,16 +84,15 @@ Option 0: Standalone Errors   <=== nope!
 my $x = 12.5 does Error(0.5);
 
 No opportunity for fancy slang, Grammar
-Can override math functions
-Not possible due to inability to unambiguously tighten infix sigs
-Revert back to mixins later at Measure objects?
+Can't override math functions due to ambiguities in infix signatures
+Recommend use of Dimensionless Measure objects
 
 Option 1: Postfix Operator Syntax (SI Units)
 
 my Length $x = 12.5nm ± 10%;
    ------ -- - ------ - ---
       |    | |   |  | |  |
-      |    | |   |  | |  > Rat relative error [or '±4.2%' Rat relative error]
+      |    | |   |  | |  > Rat percent error [or '±4.2%' Rat relative error]
       |    | |   |  | |
       |    | |   |  | > ± symbol as custom raku infix operator
       |    | |   |  |
