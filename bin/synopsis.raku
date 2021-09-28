@@ -11,7 +11,7 @@ use Physics::Measure :ALL;
 #--------
 
 #my Length $x = 12.5nm ± 1;
-#my Length $x = 12.5nm ± 10%;
+my Length $x = 12.5nm ± 10%;
 #my Length $x = 12.5nm;
 
 #Option 2
@@ -21,16 +21,16 @@ use Physics::Measure :ALL;
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0);
 #my Length $x = Length.new(value => 0, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
-my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
+#my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
 #say $x;
 say ~$x; #12.5nm ±4%
-#say $x.error.absolute;
-#say $x.error.relative;
-#say $x.error.percent;
-#say $x.error.relative.WHAT;
+say $x.error.absolute;
+say $x.error.relative;
+say $x.error.percent;
+say $x.error.relative.WHAT;
 
-#my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
+my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 #my Length $y = Length.new(value => 12.5e2, units => 'μm');
 
 #say $y;
@@ -45,12 +45,12 @@ say ~$x; #12.5nm ±4%
 #my $z = -$x;
 #my $z = $x + $y;
 #my $z = $y + $x;
-#my $z = $x + 17;   #FIXME (maybe push up add/sub const and remove new from Real?)
-my $z = .2 - $x;
+#my $z = $x + 17;
+#my $z = .2 - $x;
 #my $z = 17 + $y;
 #my $z = $x - $y;
 #my $z = $y - $x;
-#my $z = $x - $x;    #FIXME Use of uninitialized value %fact2pfix{'1e-21'}
+my $z = $x - $x;
 #my $z = $x * $y;
 #my $z = 17 * $x;
 #my $z = $x / $y;

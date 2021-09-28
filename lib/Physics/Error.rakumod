@@ -76,6 +76,7 @@ class Error is export {
         }
     }
 
+    # value must be explicitly rebound on Error.new but not Measure.new
     method bind-mea-value(\value) { $!mea-value := value };
 
     #### Getters ####
