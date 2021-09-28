@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 use Physics::Measure :ALL;
 
-#Option 0
+#Option 0    NOPE
 #--------
 
 #my $x = 12.5 does Error(0.5);       #Rat
@@ -11,7 +11,7 @@ use Physics::Measure :ALL;
 #--------
 
 #my Length $x = 12.5nm ± 1;
-my Length $x = 12.5nm ± 10%;
+#my Length $x = 12.5nm ± 10%;
 #my Length $x = 12.5nm;
 
 #Option 2
@@ -23,18 +23,25 @@ my Length $x = 12.5nm ± 10%;
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => 0.5);
 #my Length $x = Length.new(value => 12.5, units => 'nm', error => '4.3%');
 
+#Option 3
+#--------
+
+my Length $x = ♎️ '12.5 ft ±0.5';
+#my Length $x = ♎️ '12.5 ft ±10.5%';
+#my Length $x = ♎️ '12.5 ft';
+
 #say $x;
 say ~$x; #12.5nm ±4%
-say $x.error.absolute;
-say $x.error.relative;
-say $x.error.percent;
-say $x.error.relative.WHAT;
+#say $x.error.absolute;
+#say $x.error.relative;
+#say $x.error.percent;
+#say $x.error.relative.WHAT;
 
 my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 #my Length $y = Length.new(value => 12.5e2, units => 'μm');
 
 #say $y;
-#say ~$y; #1250μm ±4.3%
+say ~$y; #1250μm ±4.3%
 #say $y.error.absolute;
 #say $y.error.relative;
 #say $y.error.percent;
@@ -49,8 +56,8 @@ my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 #my $z = .2 - $x;
 #my $z = 17 + $y;
 #my $z = $x - $y;
-#my $z = $y - $x;
-my $z = $x - $x;
+my $z = $y - $x;
+#my $z = $x - $x;
 #my $z = $x * $y;
 #my $z = 17 * $x;
 #my $z = $x / $y;
@@ -70,7 +77,7 @@ my $z = $x - $x;
 
 #say $z;
 say ~$z; #42 ±4.2 nanometre
-#say ~$z.norm;
+say ~$z.norm;
 #say $z.error.absolute;
 #say $z.error.relative;
 #say $z.error.percent;
@@ -119,19 +126,19 @@ say ~$x; #42 ±4.2nanometre
 
 Option 3: Libra Shorthand Syntax
 
-my Length $x ♎️ '12.5 ±0.05 nm';
-   ------ -- --  ---- ----- --
-      |    |  |   |   |  |  |
-      |    |  |   |   |  |  |
-      |    |  |   |   |  |  > Str units (of Type Length is Measure)
-      |    |  |   |   |  |
-      |    |  |   |   |  > Real absolute error [or '±4.2%' Rat relative error]
-      |    |  |   |   |
-      |    |  |   |   > '±' symbol as custom raku prefix operator
-      |    |  |   |
-      |    |  |   > Real number
-      |    |  |
-      |    |  > parse rhs string, construct object and assign to lhs (♎️ <-- custom <libra> operator)
+my Length $x = ♎️ '12.5 nm ±0.05';
+   ------ --   --  ---- -- -----
+      |    |    |   |   |  |  |
+      |    |    |   |   |  |  |
+      |    |    |   |   |  |  >  Real absolute error [or '±4.2%' Rat relative error]
+      |    |    |   |   |  |
+      |    |    |   |   |  > '±' symbol as custom raku prefix operator
+      |    |    |   |   |
+      |    |    |   |   > Str units (of Type Length is Measure)
+      |    |    |   |
+      |    |    |   > Real number
+      |    |    |
+      |    |    > parse rhs string, construct object and assign to lhs (♎️ <-- custom <libra> operator)
       |    |
       |    > a scalar variable
       |
