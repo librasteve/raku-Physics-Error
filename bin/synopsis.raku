@@ -78,10 +78,10 @@ my $z = $y - $x;
 #say $z;
 say ~$z; #42 ±4.2 nanometre
 say ~$z.norm;
-#say $z.error.absolute;
-#say $z.error.relative;
-#say $z.error.percent;
-#say $z.error.relative.WHAT;
+say $z.error.absolute;
+say $z.error.relative;
+say $z.error.percent;
+say $z.error.relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html

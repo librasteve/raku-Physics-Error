@@ -5,31 +5,25 @@ err.add = abs + abs -DONE
 err.mul = rel + rel -DONE
 err.pwr = n x rel -DONE
 err.root = rel / n -DONE
-
+Dimensionless for math -DONE
+angle on decimal -DONE?
 in -DONE
 rebase -DONE
 norm -DONE
 cmp -DONE
 output % -DONE
 output abs (this is default for .gist) -DONE
+inputs (option 1,3) -DONE
 
-inputs (option 1,3)
 
 guard rail err > 50%
 set round to (value and error)
 set sigfig s
-
-
-eg. value => 12.5e2, error => '4.3%' ...
-error => Physics::Error::Error.new(absolute => 53.74999999999999e0
-
-
-
-angle on decimal -DONE?
 trig drop Error (manual)
 
-Dimensionless for math -DONE?
-(drop (1) from say?? mode)
+document
+- new prefix to replace assign and declaration - $a = ♎'39 °C';
+- dimensionless (1) also (drop (1) from say?? mode)
 
 thus
 what to do if only one operand has an error
@@ -41,13 +35,7 @@ v2 backlog
 - reduction operators on List/Sequence of Errors (eg. sequence of readings)
 - Standard Deviation (as a modal setting?)
 - errors on unit definition factors
-
-todos
-- design, implement & document application of Error to Duration (if any)
-- layer in error to assignment section of Measure.rakumod
-
-document new prefix to replace assign and declaration
-- $a = ♎'39 °C';
+- method to define error propagation on eg. trig
 
 
 ]
