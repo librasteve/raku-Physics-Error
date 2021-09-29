@@ -39,10 +39,6 @@ this module assumes linear formulae
 
 
 
-
-
-
-- test
 - synopsis
 - readme
 
@@ -86,3 +82,75 @@ what to do if only one operand has an error
 use case 1 - apply constant gauge calibration offset
 use case 2 - apply linear gauge calibration factor
 if operand is Real, Error (abs) is zero
+
+
+
+#`[
+#viz. https://www.mathsisfun.com/measure/error-measurement.html
+#viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
+
+Option 0: Standalone Errors   <=== nope!
+
+my $x = 12.5 does Error(0.5);
+
+No opportunity for fancy slang, Grammar
+Can't override math functions due to ambiguities in infix signatures
+Recommend use of Dimensionless Measure objects
+
+Option 1: Postfix Operator Syntax (SI Units)
+
+my Length $x = 12.5nm ± 10%;
+   ------ -- - ------ - ---
+      |    | |   |  | |  |
+      |    | |   |  | |  > Rat percent error [or '±4.2%' Rat relative error]
+      |    | |   |  | |
+      |    | |   |  | > ± symbol as custom raku infix operator
+      |    | |   |  |
+      |    | |   |  > 'nm' Unit constructor as custom raku postfix operator (no ws)
+      |    | |   |
+      |    | |   > Real number
+      |    | |
+      |    | > assignment of new Object from postfix rhs
+      |    |
+      |    > a scalar variable
+      |
+      > Type (Length is Measure) ... can be omitted
+
+#12.5nm ±10% is a List of two terms, first with postfix, second with prefix
+#so can you implement via object $x taking a list? - maybe use that same lvalue thing?
+
+Option 2: Object Constructor Syntax
+
+my Length $x = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
+
+say ~$x; #42 ±4.2nanometre
+
+
+Option 3: Libra Shorthand Syntax
+
+my Length $x = ♎️ '12.5 nm ±0.05';
+   ------ --   --  ---- -- -----
+      |    |    |   |   |  |  |
+      |    |    |   |   |  |  |
+      |    |    |   |   |  |  >  Real absolute error [or '±4.2%' Rat relative error]
+      |    |    |   |   |  |
+      |    |    |   |   |  > '±' symbol as custom raku prefix operator
+      |    |    |   |   |
+      |    |    |   |   > Str units (of Type Length is Measure)
+      |    |    |   |
+      |    |    |   > Real number
+      |    |    |
+      |    |    > parse rhs string, construct object and assign to lhs (♎️ <-- custom <libra> operator)
+      |    |
+      |    > a scalar variable
+      |
+      > Type (Length is Measure) ... can be omitted
+
+
+
+
+Notes:
+- while very tempting to handle the relative case with a '%' postfix operator, this is not needed and possibly quite confusing with hash sigil
+- would be nice to feed a Rat object or literal <1/2> into the relative error window
+
+
