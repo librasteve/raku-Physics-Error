@@ -84,17 +84,22 @@ use Physics::Measure :ALL;
 #say $z.error.percent;
 #say $z.error.relative.WHAT;
 
+$Physics::Measure::round-val = Nil;
+
 #my \Em = 9.109_383_7015e-31m ±0.000_000_0028e-31; #guard rail test (lower)
-my \Em = 9109_383_7015e30kg ±28e30;                #guard rail test (upper)
-#my \Em = 9.109_383_7015e-31kg ±0.000_000_0028e-31;
+#my \Em = 9109_383_7015e30kg ±28e30;                #guard rail test (upper)
+
+
+my \Em = 9.109_383_701_5e-31kg ±0.000_000_002_8e-31;
 say ~Em;
+#say ~Em.error;
 #say Em.^name;
-say ~Em.norm;
-#say Em.norm.magnitude;
-#say Em.error.absolute;
-#say Em.error.relative;
-#say Em.error.percent;
-#say Em.error.relative.WHAT;
+#say ~Em.norm;
+#say ~Em.norm.error;
+say Em.error.absolute;
+say Em.error.relative;
+say Em.error.percent;
+say Em.error.relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html

@@ -15,15 +15,41 @@ output % -DONE
 output abs (this is default for .gist) -DONE
 inputs (option 1,3) -DONE
 norm guard rails -DONE
-
-
-set round to (value and error)
-set sigfig s
+set round-val -DONE
+set sigfigS -DONE
 
 
 document
 - new prefix to replace assign and declaration - $a = ♎'39 °C';
 - dimensionless (1) also (drop (1) from say?? mode)
+- output precision, 3 controls
+-- .norm (use SI prefixes to normalize)
+-- $Physics::Measure::round-val #round output (default 14 decimal places)
+--
+
+sigfig
+- viz. https://pml.nist.gov/cgi-bin/cuu/Value?me|search_for=atomnuc!
+- \Em = 9.109_383_701_5e-31kg
+-      ±0.000_000_002_8e-31;  (standard uncertainty)
+-
+- value: 1.10 = 11 significant digits
+- error: 0.10 = 10 significant digits (padding 0s count if towards '.')
+-
+- round-to off
+- ~Em      => 9.1093837015e-31kg ±2.8e-40
+- ~Em.norm => 0.0009109383701500001yg ±2.8000000000000007e-13   [clipped to yg]
+-
+- norm:  0.14 = 14 significant digits
+-
+-
+- viz. https://en.wikipedia.org/wiki/IEEE_754#Decimal
+- IEEE_754 preserves 17 decimal digits for binary64
+
+
+round-to
+- naive constraint on the value
+- is ~ν.norm, '119.92PHz'
+- applied on output Str
 
 thus
 what to do if only one operand has an error
@@ -41,11 +67,9 @@ v2 backlog
 
 ]
 
-# this option to set the general relative error
-# this is the minimum permitted error
-# viz. https://pml.nist.gov/cgi-bin/cuu/Value?plkm#mid = 1.1 x 10^-5
-our $relative-standard-uncertainty = 1.1e-5;
-
+our $sigfigs = 6; #control precision of absolute error
+our $percent = 0; #optional 0=absolute|1=percent error
+our $round-per = 0.0001; #controls rounding of percent
 
 class Error is export {
     has Real $.absolute is rw;
@@ -76,7 +100,13 @@ class Error is export {
         ( $!absolute / $!mea-value ).abs
     }
     method percent {
-        "{ self.relative * 100 }%"
+        "{ self.relative.round( $round-per ) * 100 }%"
+    }
+
+    #### Formatting ###
+    method Str {
+        my $clipped = sprintf( "%.{$sigfigs}e", $!absolute);  #provides 6 sig digs
+        return "{$percent ?? $.percent !! $clipped}"
     }
 
     #### Maths Ops ####
