@@ -1,11 +1,6 @@
 #!/usr/bin/env raku
 use Physics::Measure :ALL;
 
-#Option 0    NOPE
-#--------
-
-#my $x = 12.5 does Error(0.5);       #Rat
-#my $y = 12.5e2 does Error(0.5e2);   #Num
 
 #Option 1
 #--------
