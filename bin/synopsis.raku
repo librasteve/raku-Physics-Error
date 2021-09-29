@@ -26,22 +26,22 @@ use Physics::Measure :ALL;
 #Option 3
 #--------
 
-my Length $x = ♎️ '12.5 ft ±0.5';
+#my Length $x = ♎️ '12.5 ft ±0.5';
 #my Length $x = ♎️ '12.5 ft ±10.5%';
 #my Length $x = ♎️ '12.5 ft';
 
 #say $x;
-say ~$x; #12.5nm ±4%
+#say ~$x; #12.5nm ±4%
 #say $x.error.absolute;
 #say $x.error.relative;
 #say $x.error.percent;
 #say $x.error.relative.WHAT;
 
-my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
+#my Length $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
 #my Length $y = Length.new(value => 12.5e2, units => 'μm');
 
 #say $y;
-say ~$y; #1250μm ±4.3%
+#say ~$y; #1250μm ±4.3%
 #say $y.error.absolute;
 #say $y.error.relative;
 #say $y.error.percent;
@@ -56,7 +56,7 @@ say ~$y; #1250μm ±4.3%
 #my $z = .2 - $x;
 #my $z = 17 + $y;
 #my $z = $x - $y;
-my $z = $y - $x;
+#my $z = $y - $x;
 #my $z = $x - $x;
 #my $z = $x * $y;
 #my $z = 17 * $x;
@@ -76,12 +76,25 @@ my $z = $y - $x;
 #say $x cmp $y;
 
 #say $z;
-say ~$z; #42 ±4.2 nanometre
-say ~$z.norm;
-say $z.error.absolute;
-say $z.error.relative;
-say $z.error.percent;
-say $z.error.relative.WHAT;
+#say ~$z; #42 ±4.2 nanometre
+#say ~$z.norm;
+#say $z.norm.magnitude;
+#say $z.error.absolute;
+#say $z.error.relative;
+#say $z.error.percent;
+#say $z.error.relative.WHAT;
+
+#my \Em = 9.109_383_7015e-31m ±0.000_000_0028e-31; #guard rail test (lower)
+my \Em = 9109_383_7015e30kg ±28e30;                #guard rail test (upper)
+#my \Em = 9.109_383_7015e-31kg ±0.000_000_0028e-31;
+say ~Em;
+#say Em.^name;
+say ~Em.norm;
+#say Em.norm.magnitude;
+#say Em.error.absolute;
+#say Em.error.relative;
+#say Em.error.percent;
+#say Em.error.relative.WHAT;
 
 #`[
 #viz. https://www.mathsisfun.com/measure/error-measurement.html

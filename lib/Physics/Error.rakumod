@@ -14,12 +14,12 @@ cmp -DONE
 output % -DONE
 output abs (this is default for .gist) -DONE
 inputs (option 1,3) -DONE
+norm guard rails -DONE
 
 
-guard rail err > 50%
 set round to (value and error)
 set sigfig s
-trig drop Error (manual)
+
 
 document
 - new prefix to replace assign and declaration - $a = ♎'39 °C';
@@ -35,15 +35,17 @@ v2 backlog
 - reduction operators on List/Sequence of Errors (eg. sequence of readings)
 - Standard Deviation (as a modal setting?)
 - errors on unit definition factors
-- method to define error propagation on eg. trig
+- method to define error propagation on functions eg. trig
+- trig drop Error (manual)
 
 
 ]
 
-my regex number {
-    \S+                     #grab chars
-    <?{ +"$/" ~~ Real }>    #assert coerces via '+' to Real
-}
+# this option to set the general relative error
+# this is the minimum permitted error
+# viz. https://pml.nist.gov/cgi-bin/cuu/Value?plkm#mid = 1.1 x 10^-5
+our $relative-standard-uncertainty = 1.1e-5;
+
 
 class Error is export {
     has Real $.absolute is rw;
@@ -58,13 +60,13 @@ class Error is export {
             when Real {
                 return self.bless( absolute => $error.abs )
             }
-            when /(<number>) '%'/ {
-                return self.bless( absolute => ( $0 / 100 * $value ) )
+            when /^ ( <-[%]>* ) '%' $/ {
+                return self.bless( absolute => ( +"$0" / 100 * $value ) )
             }
         }
     }
 
-    # value must be explicitly rebound on Error.new but not Measure.new
+    # must be explicitly rebound on Error.new unless also Measure.new
     method bind-mea-value(\value) { $!mea-value := value };
 
     #### Getters ####
