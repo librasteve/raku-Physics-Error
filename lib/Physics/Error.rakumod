@@ -33,7 +33,7 @@ class Error is export {
         ( $!absolute / $!mea-value ).abs
     }
     method percent {
-        #round to eg. 4 places eg. 13.02%
+        #round to eg. 3 places eg. 13.02%
         "{ self.relative.round( $round-per ) * 100 }%"
     }
 
