@@ -15,7 +15,7 @@ my $x = Error.new( :$error, :$value );
 $x.bind-mea-value( $value );
 
 is $x.^name, 'Physics::Error::Error',               '.^name';
-is ~$x, '1.000000e+01',                             '.Str';
+is ~$x, '1.00e+01',                                 '.Str';
 ok $x.absolute == 10,                               '.absolute';
 ok $x.relative == 0.1,                              '.relative';
 is $x.relative.^name, 'Rat',                        '.percent.^name';

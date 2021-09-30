@@ -1,8 +1,8 @@
 unit module Physics::Error:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 
-our $sigfigs = 6; #control precision of absolute error
+our $sigfigs = 2; #control precision of absolute error
 our $default = 'absolute'; #optional [absolute|percent] error
-our $round-per = 0.0001; #controls rounding of percent
+our $round-per = 0.001; #controls rounding of percent
 
 class Error is export {
     has Real $.absolute is rw;

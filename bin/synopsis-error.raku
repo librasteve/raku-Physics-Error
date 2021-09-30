@@ -17,9 +17,9 @@ say $x1.error.relative.^name;                   #Rat
 say $x1.error.percent;                          #8%
 
 # Some global settings help to control precision and formatting
-our $Physics::Error::sigfigs   = 6;             #control precision of absolute error
-our $Physics::Error::default   = 'absolute';    #optional [absolute|percent] error
-our $Physics::Error::round-per = 0.0001;        #controls rounding of percent
+$Physics::Error::sigfigs   = 2;             #control precision of absolute error
+$Physics::Error::default   = 'absolute';    #default error output [absolute|percent]
+$Physics::Error::round-per = 0.001;         #control rounding of percent
 
 # Unit conversions and normalization
 my $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
