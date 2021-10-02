@@ -3,7 +3,7 @@ unit module Physics::Error:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 our $default = 'absolute';  #set default error format [absolute|percent]
 #our $default = 'percent';
 
-our $round-per = 0.001;     #set rounding of percent
+our $round-per = 0.001;     #set rounding of percent for get & set (0.001 == 0.01% )
 
 class Error is export {
     has Real $.absolute is rw;
@@ -19,7 +19,8 @@ class Error is export {
                 return self.bless(absolute => $error.abs)
             }
             when /^ (<-[%]>*) '%' $/ {
-                return self.bless(absolute => (+"$0" / 100 * $value))
+                my $percent = +"$0";
+                return self.bless(absolute => ($percent / 100 * $value).round($round-per))
             }
         }
     }
@@ -40,7 +41,7 @@ class Error is export {
         "{ self.relative.round($round-per) * 100 }%"
     }
 
-    #### Formatting ###
+    #### Formatting & Rounding ###
     method Str {
         "{ $default eq 'percent' ?? $.percent !! self.denorm[0] }"
     }
@@ -63,28 +64,37 @@ class Error is export {
         my $integer = ~$0;
         my $fraction = ~$1;
 
-        #get mea-value exponent
+        # unpack mea-value exponent
         my (Any, Any, $mea-exp) = unpack-sme($!mea-value);
 
         my $adjust-exp;
         my $error-str;
 
+        #FIXME - what about "cross-terms" (mea has exp, err not and viceverce)
         if $fraction {
-            # for fraction, count significant digits eg. x.｢1093837015｣ => -10
-            $adjust-exp = -$fraction.chars;
+            if $err-exp {
+                # case 1: 2.8     ... -10 => 0.0000000028
 
-            # for fraction, denorm to match measure exponent...
-            $integer = '' if $integer == '0';   #handle case of eg. 0.009
-            my $exp-offset = -( $err-exp - $mea-exp + $integer.chars );
+                # for fraction, count digits eg. x.｢8｣ => -1
+                $adjust-exp = -$fraction.chars;
 
-            # ... then left zero pad ...
-            my $left-pad = '';
-            $left-pad ~= '0' for 0..^$exp-offset;
+                # for fraction, denorm to match measure exponent...
+                $integer = '' if $integer == '0';
+                #handle case of eg. 0.009
+                my $exp-offset = -($err-exp - $mea-exp + $integer.chars);
 
-            # ... and assemble with measure exponent
-            my $new-exp = $err-exp == 0 ?? '' !! "e{$mea-exp}";
-            $error-str = "0.{$left-pad}{$integer}{$fraction}{$new-exp}";
+                # ... then left zero pad ...
+                my $left-pad = '';
+                $left-pad ~= '0' for 0 ..^ $exp-offset;
 
+                # ... and assemble with measure exponent
+                my $new-exp = $err-exp == 0 ?? '' !! "e{ $mea-exp }";
+                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ $new-exp }";
+            } else {
+                # case 2: 54.288  ...  0 => 54.288
+                $adjust-exp = -$fraction.chars;
+                $error-str = "{ $integer }.{ $fraction }";
+            }
         } else {
             # for integer, count right zero pad eg. 9000[.] => 3
             $integer ~~ / ('0'*) $ /;
@@ -94,7 +104,7 @@ class Error is export {
         }
 
         # make round-to argument to be applied to Measure value
-        my $round-to  = "1e{ $adjust-exp + $err-exp - 1 }";  #give 10x precision
+        my $round-to  = "1e{ $adjust-exp + $err-exp - 1 }";  #lift precision by 10x
         $round-to = Nil if $!absolute == 0;
 
         return( $error-str, $round-to )
