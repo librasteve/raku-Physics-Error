@@ -41,29 +41,25 @@ $z = $z ** <1/3>;                               #10m ±2.00e-01
 say $w cmp $y;                                  #More
 
 # Some global settings help to control Error output precision and rounding (here with default values)
-$Physics::Error::sigfigs   = 2;             #control precision of absolute error
 $Physics::Error::default   = 'absolute';    #default error output [absolute|percent]
 $Physics::Error::round-per = 0.001;         #control rounding of percent
 
 # Use these with the global setting for Measure value output rounding (default is 14 decimal places)
 # Here we choose to suppress all Measure value rounding due to the very small value of Em
 
-$Physics::Measure::round-val = Nil;
+#$Physics::Measure::round-val = Nil;
 
 # Here's the mass of the electron Em in action...
 my \Em = 9.109_383_701_5e-31kg   \
         ±0.000_000_002_8e-31;
 
 say ~Em;                                        #9.1093837015e-31kg ±2.80e-40
-say ~Em.norm;                                   #0.0009109383701500001yg ±2.80e-13
 say Em.error.absolute;                          #2.8e-40
 say Em.error.relative;                          #3.0737534961217373e-10
 say Em.error.relative.^name;                    #Num
 say Em.error.percent;                           #0%
 
 #EOF
-
-
 
 
 
