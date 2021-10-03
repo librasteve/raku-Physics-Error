@@ -103,11 +103,12 @@ class Error is export {
             $error-str = "$mantissa";
         }
 
-        # make round-to argument to be applied to Measure value
-        my $round-to  = "1e{ $adjust-exp + $err-exp - 1 }";  #lift precision by 10x
-        $round-to = Nil if $!absolute == 0;
+        # make round argument
+        my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
+        my $round  = sprintf( <%e>, (10 ** $digits) );
+           $round  = 1e-14 if $!absolute == 0;
 
-        return( $error-str, $round-to )
+        return( $error-str, $round )
     }
 
     #### Maths Ops ####
