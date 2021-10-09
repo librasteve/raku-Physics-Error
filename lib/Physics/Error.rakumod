@@ -8,6 +8,7 @@ our $round-per = 0.001;     #set rounding of percent for get & set (0.001 == 0.0
 class Error is export {
     has Real $.absolute is rw;
     has Real $!mea-value;
+    has Bool $.as-percent = False;
 
     #### Constructor ####
     method new(:$error, :$value) {
@@ -20,7 +21,7 @@ class Error is export {
             }
             when /^ (<-[%]>*) '%' $/ {
                 my $percent = +"$0";
-                return self.bless(absolute => ($percent / 100 * $value).round($round-per))
+                return self.bless(absolute => ($percent / 100 * $value).round($round-per), :as-percent);
             }
         }
     }
@@ -28,6 +29,8 @@ class Error is export {
     method bind-mea-value(\value) {
         $!mea-value := value
     };
+
+    #iamerejh - use bind-mea-value to call denorm to create Str and precision
 
     #### Getters ####
     method relative {
@@ -70,7 +73,7 @@ class Error is export {
         my $adjust-exp;
         my $error-str;
 
-        #FIXME - what about "cross-terms" (mea has exp, err not and viceverce)
+        #FIXME - what about "cross-terms" (eg. mea has exp, err not and viceverce)
         if $fraction {
             if $err-exp {
                 # case 1: 2.8     ... -10 => 0.0000000028
@@ -85,7 +88,7 @@ class Error is export {
 
                 # ... then left zero pad ...
                 my $left-pad = '';
-                $left-pad ~= '0' for 0 ..^ $exp-offset;
+                $left-pad ~= '0' for ^$exp-offset;
 
                 # ... and assemble with measure exponent
                 my $new-exp = $err-exp == 0 ?? '' !! "e{ $mea-exp }";
@@ -105,7 +108,7 @@ class Error is export {
 
         # make round argument
         my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
-        my $round  = sprintf( <%e>, (10 ** $digits) );
+        my $round  = +sprintf( <%e>, (10 ** $digits) );
            $round  = 1e-14 if $!absolute == 0;
 
         return( $error-str, $round )

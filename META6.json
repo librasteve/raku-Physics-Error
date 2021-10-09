@@ -11,7 +11,7 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Physics::Error": "lib/Physics/Error.rakumod"
+    "Physics::Error": "lib/Physics/Error.pm6"
   },
   "resources": [],
   "license": "Artistic-2.0",
