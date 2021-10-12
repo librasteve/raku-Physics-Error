@@ -8,7 +8,6 @@ our $round-per = 0.001;     #set rounding of percent for get & set (0.001 == 0.0
 class Error is export {
     has Real $.absolute is rw;
     has Real $!mea-value;
-    has Bool $.as-percent = False;
 
     #### Constructor ####
     method new(:$error, :$value) {
@@ -21,7 +20,7 @@ class Error is export {
             }
             when /^ (<-[%]>*) '%' $/ {
                 my $percent = +"$0";
-                return self.bless(absolute => ($percent / 100 * $value).round($round-per), :as-percent);
+                return self.bless( absolute => ($percent / 100 * $value).round($round-per) );
             }
         }
     }
@@ -29,8 +28,6 @@ class Error is export {
     method bind-mea-value(\value) {
         $!mea-value := value
     };
-
-    #iamerejh - use bind-mea-value to call denorm to create Str and precision
 
     #### Getters ####
     method relative {
@@ -108,8 +105,9 @@ class Error is export {
 
         # make round argument
         my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
-        my $round  = +sprintf( <%e>, (10 ** $digits) );
+        my $round  = +sprintf( <%e>, (10 ** $digits) ); #start with Num to
            $round  = 1e-14 if $!absolute == 0;
+           $round .= Str;                               #need Str as arg for round()
 
         return( $error-str, $round )
     }
