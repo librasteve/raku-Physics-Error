@@ -6,7 +6,7 @@
   "authors": [
     "p6steve"
   ],
-  "auth": "github:p6steve",
+  "auth": "zef:p6steve",
   "depends": [],
   "build-depends": [],
   "test-depends": [],
