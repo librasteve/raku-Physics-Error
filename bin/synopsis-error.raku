@@ -3,11 +3,9 @@ use Physics::Measure :ALL;
 
 # Physics::Error supports the three methods for making Measure objects with value, units & error
 
-my $x1 = 12.5nm ± 1;                                                    #SI units as raku postfix operators
+my $x1 = 12.5nm ±1;                                                     #SI units as raku postfix operators
 my $x2 = Length.new(value => 12.5, units => 'nm', error => '4.3%');     #standard .new syntax
 my $x3 = ♎️ '12.5 ft ±0.5';                                             #libra prefix shortcut
-
-my $x0 = 12.5nm;                                #or just omit the Error part to get a regular Measure
 
 # Error values can be accessed via the .error object
 say ~$x1;                                       #12.5nm ±4% or 12.5nm ±1
@@ -45,6 +43,8 @@ $Physics::Error::default   = 'absolute';    #default error output [absolute|perc
 $Physics::Error::round-per = 0.001;         #control rounding of percent
 
 # Here's the mass of the electron Em in action...
+# viz. https://pml.nist.gov/cgi-bin/cuu/Value?me|search_for=atomnuc!
+
 my \Em = 9.109_383_701_5e-31kg   \
         ±0.000_000_002_8e-31;
 

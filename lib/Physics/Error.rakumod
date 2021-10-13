@@ -1,5 +1,9 @@
 unit module Physics::Error:ver<1.0.0>:auth<Steve Roe (p6steve@furnival.net)>;
 
+#viz. https://www.mathsisfun.com/measure/error-measurement.html
+#viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
+#viz. https://en.wikipedia.org/wiki/IEEE_754#Decimal ... IEEE_754 preserves 17 decimal digits for binary64
+
 our $default = 'absolute';  #set default error format [absolute|percent]
 #our $default = 'percent';
 
