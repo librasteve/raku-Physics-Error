@@ -57,8 +57,8 @@ Controls for Error output format and rounding of percentage errors (here with de
 $Physics::Error::default   = 'absolute';    #default error output [absolute|percent]
 $Physics::Error::round-per = 0.001;         #control rounding of percent
 ```
-Two ways for Measure output precision control. These only act on the .Str output rendering and leave the Measure .value and .error.absolute "truth" untouched.  :
-####Automagic
+Two ways for Measure output precision control. These only act on the .Str output rendering and leave the Measure .value and .error.absolute "truth" untouched.
+#### Automagic
 This option uses .error.denorm to right shift the error value and align to the mantissa precision of the measure value. The number of significant digits in the error is then used to round the measure value.
 
 ```perl6
@@ -71,7 +71,7 @@ say Em.error.relative;                          #3.0737534961217373e-10
 say Em.error.relative.^name;                    #Num
 say Em.error.percent;                           #0%
 ```
-####Manual
+#### Manual
 Manual precision can be set - this overrides the automagic behaviour.
 ```perl6
 $Physics::Measure::round-val = 0.01;
@@ -88,7 +88,6 @@ is ~ν.norm, '119.92PHz',						'~ν.norm';
 my \Ep = $ℎ * ν;  
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 ```
-
 
 In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 - this gets fairly heavy fairly quickly --- real world physical errors can be non-linear and accelerate rapidly
@@ -148,57 +147,3 @@ my Length $x = ♎️ '12.5 nm ±0.05';
 ####Help Wanted
 
 Over time I imagine an eco-system of equation parsing / pde plugins and machine calibration matrices - feel free to continue the journey in this direction with a pull request!
-
-
-
-
-
-
-to Measure doc...
-- new prefix to replace assign and declaration - $a = ♎'39 °C';
-- dimensionless (1) also (drop (1) from say?? mode)
-  
-
-
-
-
-
-
-
-
-
-
-
-
-Also need to share the formatting / precision control design:
-* absolute vs. percent control over preferred output
-* our $Physics::Error::round-per = 0.001; configure rounding
-* need for absolute as well as percent
-* denorm method to keep error aligned to value
-
-```raku
-my $Em1 = 9.109_383_701_5e-31kg ±0.000_000_002_8e-31;
-is $Em1, '9.1093837015e-31kg ±0.0000000028e-31',                 'precision1';
-```
-* manual specification of our $Physics::Measure::round-val
-
-```raku
-$Physics::Measure::round-val = 0.01;   (default = 0, 0.00..01 to 14 (Rat) and/or 17 (Num) decimals is also a good setting)
-
-my $c = ♎️ '299792458 m/s';
-my $ℎ = ♎️ '6.626070015e-34 J.s';
-
-my \λ = 2.5nm; 
-is ~λ, '2.5nm',									'~λ';
-
-my \ν = $c / λ;  
-is ~ν.norm, '119.92PHz',						'~ν.norm';
-
-my \Ep = $ℎ * ν;  
-is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
-```
-* precision control does not alter fundamental truth (override default .Str if you don't like it)
-
-rationale is to have (only) two ways to apply precision control: manual and automatic
-then to provide tight control with manual for extreme or particular requirements
-percent is a much looser regime than absolute
