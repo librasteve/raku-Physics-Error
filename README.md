@@ -3,6 +3,10 @@ some code to handle physical measurement errors (nothing to do with programming 
 
 [![Build Status](https://app.travis-ci.com/p6steve/raku-Physics-Error.svg?branch=main)](https://app.travis-ci.com/p6steve/raku-Physics-Error)
 
+# Instructions
+Installs automatically with```zef --verbose install Physics-Measure```
+and, conversely, ```zef uninstall Physics::Measure```
+
 Take a look at your keyboard... there's probably a '±' key?
 
 Physics::Error works with the [Physics::Measure](https://github.com/p6steve/raku-Physics-Measure) and [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) modules to do this:
