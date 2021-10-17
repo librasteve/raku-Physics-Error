@@ -114,6 +114,7 @@ class Error is export {
         my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
         my $round  = +sprintf( <%e>, (10 ** $digits) ); #start with Num to
            $round .= Str;                               #need Str as arg for round()
+           $round  = Nil if $!absolute == 0;            #do not round exact amounts (e.g. constants)
 
         return( $error-str, $round )
     }
