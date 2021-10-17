@@ -49,6 +49,9 @@ class Error is export {
     method Str {
         "{ $default eq 'percent' ?? $.percent !! self.denorm[0] }"
     }
+    method gist {
+        self.Str
+    }
 
     sub unpack-sme(Str(Real) $number) {
         # get sign, mantissa & exponent Str from Int|Rat|Num (Real)
