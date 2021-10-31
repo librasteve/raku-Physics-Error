@@ -1,7 +1,7 @@
 {
   "name": "Physics::Error",
   "description": "some code to handle physical measurement errors (nothing to do with programming errors!)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "perl": "6.d",
   "authors": [
     "p6steve"
