@@ -11,7 +11,7 @@ uninstall with, ```zef uninstall Physics::Measure``` and ```zef uninstall Physic
 In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 - this gets fairly heavy fairly quickly ... real world physical errors can be non-linear and accelerate rapidly
 - this module is definitively LINEAR ONLY ;-)
-## this module is not intended for use in mission critical applications
+#### this module is not intended for use in mission critical applications
 
 # Synopsis
 Take a look at your keyboard... there's probably a '±' key?
@@ -103,7 +103,7 @@ is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 
 Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/p6steve/raku-Physics-Measure/edit/master/README.md). The formats are dissected below:
 
-####Option 1: Postfix Operator Syntax (SI Units)
+#### Option 1: Postfix Operator Syntax (SI Units)
 
 ```
 my Length $x = 12.5nm ± 10%;
@@ -123,14 +123,14 @@ my Length $x = 12.5nm ± 10%;
       |
       > Type (Length is Measure) ... can be omitted
 ```
-####Option 2: Object Constructor Syntax
+#### Option 2: Object Constructor Syntax
 
 ```
 my Length $x = Length.new(value => 12.5, units => 'nm', error => [0.5|'4.3%']);
 say ~$x; #42 ±4.2nanometre
 ```
 
-####Option 3: Libra Shorthand Syntax
+#### Option 3: Libra Shorthand Syntax
 
 ```
 my Length $x = ♎️ '12.5 nm ±0.05';
@@ -152,6 +152,6 @@ my Length $x = ♎️ '12.5 nm ±0.05';
       > Type (Length is Measure) ... can be omitted
 ```
 
-####Help Wanted
+#### Help Wanted
 
 Over time I imagine an eco-system of equation parsing / pde plugins and machine calibration matrices - feel free to continue the journey in this direction with a pull request!
