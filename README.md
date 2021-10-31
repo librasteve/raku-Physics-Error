@@ -7,6 +7,12 @@ some code to handle physical measurement errors (nothing to do with programming 
 Installs automatically with```zef --verbose install Physics-Measure```
 uninstall with, ```zef uninstall Physics::Measure``` and ```zef uninstall Physics::Error```
 
+# Context
+In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
+- this gets fairly heavy fairly quickly ... real world physical errors can be non-linear and accelerate rapidly
+- this module is definitively LINEAR ONLY ;-)
+## this module is not intended for use in mission critical applications
+
 # Synopsis
 Take a look at your keyboard... there's probably a '±' key?
 
@@ -56,6 +62,7 @@ $z = $z ** <1/3>; say ~$z;                      #10m ±2.00e-01
 # As do Measure cmp operators (to within error limits)
 say $w cmp $y;                                  #More
 ```
+
 Controls for Error output format and rounding of percentage errors (here with default values). These only act on the .Str output rendering and leave the .error.absolute "truth" untouched.
 
 ```perl6
@@ -93,10 +100,6 @@ is ~ν.norm, '119.92PHz',						'~ν.norm';
 my \Ep = $ℎ * ν;  
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 ```
-
-In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
-- this gets fairly heavy fairly quickly --- real world physical errors can be non-linear and accelerate rapidly
-- this module is definitively LINEAR ONLY ;-) ... do not use in mission critical applications without knowing what you are doing
 
 Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/p6steve/raku-Physics-Measure/edit/master/README.md). The formats are dissected below:
 
