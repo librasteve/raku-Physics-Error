@@ -1,4 +1,4 @@
-unit module Physics::Error:ver<0.1.1>:auth<Steve Roe (p6steve@furnival.net)>;
+unit module Physics::Error:ver<0.1.2>:auth<Steve Roe (p6steve@furnival.net)>;
 
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 #viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
@@ -20,11 +20,15 @@ class Error is export {
 
         given $error {
             when Real {
-                return self.bless(absolute => $error.abs)
+                self.bless(absolute => $error.abs)
             }
             when /^ (<-[%]>*) '%' $/ {
                 my $percent = +"$0";
-                return self.bless( absolute => ($percent / 100 * $value).round($round-per) );
+                self.bless( absolute => ($percent / 100 * $value).round($round-per) )
+            }
+            default {
+                #Measure $.error attr remains Error:U when not Real or Str with %
+                Error
             }
         }
     }
