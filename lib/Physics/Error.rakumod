@@ -15,8 +15,8 @@ class Error is export {
 
     #### Constructor ####
     method new(:$error, :$value) {
-        #Measure $.error attr remains Error:U without defined error value
-        return without $error;
+        #Measure $.error attr set to Error:U without defined error value
+        return Error without $error;
 
         given $error {
             when Real {
@@ -27,7 +27,7 @@ class Error is export {
                 self.bless( absolute => ($percent / 100 * $value).round($round-per) )
             }
             default {
-                #Measure $.error attr remains Error:U when not Real or Str with %
+                #Measure $.error attr set to Error:U when not Real or Str with %
                 Error
             }
         }
