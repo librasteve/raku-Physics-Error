@@ -101,7 +101,7 @@ my \Ep = $ℎ * ν;
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 ```
 
-Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/p6steve/raku-Physics-Measure/edit/master/README.md). The formats are dissected below:
+Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/p6steve/raku-Physics-Measure/blob/master/README.md). The formats are dissected below:
 
 #### Option 1: Postfix Operator Syntax (SI Units)
 
