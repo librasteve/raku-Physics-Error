@@ -1,4 +1,4 @@
-#unit module Physics::Error:ver<0.1.2>:auth<Steve Roe (librasteve@furnival.net)>;
+#unit module Physics::Error:ver<0.1.3>:auth<Steve Roe (librasteve@furnival.net)>;
 
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 #viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
