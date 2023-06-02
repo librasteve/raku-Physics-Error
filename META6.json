@@ -4,9 +4,9 @@
   "version": "0.1.2",
   "perl": "6.d",
   "authors": [
-    "p6steve"
+    "librasteve"
   ],
-  "auth": "zef:p6steve",
+  "auth": "zef:librasteve",
   "depends": [],
   "build-depends": [],
   "test-depends": [],
@@ -22,5 +22,5 @@
     "Error"
   ],
   "api": "1",
-  "source-url": "git://github.com/p6steve/raku-Physics-Error.git"
+  "source-url": "git://github.com/librasteve/raku-Physics-Error.git"
 }

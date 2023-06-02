@@ -1,7 +1,7 @@
 # raku-Physics-Error
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
-[![Build Status](https://app.travis-ci.com/p6steve/raku-Physics-Error.svg?branch=main)](https://app.travis-ci.com/p6steve/raku-Physics-Error)
+[![Build Status](https://app.travis-ci.com/librasteve/raku-Physics-Error.svg?branch=main)](https://app.travis-ci.com/librasteve/raku-Physics-Error)
 
 # Instructions
 Installs automatically with```zef --verbose install Physics-Measure```
@@ -16,7 +16,7 @@ In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_
 # Synopsis
 Take a look at your keyboard... there's probably a '±' key?
 
-Physics::Error works with the [Physics::Measure](https://github.com/p6steve/raku-Physics-Measure) and [Physics::Unit](https://github.com/p6steve/raku-Physics-Unit) modules to do this:
+Physics::Error works with the [Physics::Measure](https://github.com/librasteve/raku-Physics-Measure) and [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) modules to do this:
 
 ```perl6
 use Physics::Measure :ALL;
@@ -101,7 +101,7 @@ my \Ep = $ℎ * ν;
 is ~Ep.norm, '79.46aJ',						    '~Ep.norm';
 ```
 
-Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/p6steve/raku-Physics-Measure/blob/master/README.md). The formats are dissected below:
+Physics::Error supports the three use cases for making Measure objects with value, units & error as outlined in the Physics::Measure [README.md](https://github.com/librasteve/raku-Physics-Measure/blob/master/README.md). The formats are dissected below:
 
 #### Option 1: Postfix Operator Syntax (SI Units)
 
