@@ -16,6 +16,8 @@ say $x1.error.percent;                          #8%
 
 # Unit conversions and normalization
 my $y = Length.new(value => 12.5e2, units => 'nm', error => '4.3%');
+dd $y;
+die;
 say ~$y;                                        #1250nm ±53.75
 say ~$y.in('mm');                               #0.00125mm ±0.0000538
 say ~$y.norm;                                   #1.25μm ±0.05375

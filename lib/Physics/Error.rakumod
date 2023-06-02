@@ -1,4 +1,4 @@
-unit module Physics::Error:ver<0.1.2>:auth<Steve Roe (p6steve@furnival.net)>;
+#unit module Physics::Error:ver<0.1.2>:auth<Steve Roe (p6steve@furnival.net)>;
 
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 #viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
@@ -39,8 +39,7 @@ class Error is export {
 
     #### Getters ####
     method relative {
-        return (0 / 0).Num if $!mea-value == 0 && $!absolute == 0;
-        #makes a NaN
+        return (0 / 0).Num if $!mea-value == 0 && $!absolute == 0; #makes a NaN
         return Inf if $!mea-value == 0;
         ($!absolute / $!mea-value).abs
     }
