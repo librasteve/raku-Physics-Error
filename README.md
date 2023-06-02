@@ -1,7 +1,8 @@
 # raku-Physics-Error
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
-[![Build Status](https://app.travis-ci.com/librasteve/raku-Physics-Error.svg?branch=main)](https://app.travis-ci.com/librasteve/raku-Physics-Error)
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
+[![raku-physics-error -> DH](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml)
 
 # Instructions
 Installs automatically with```zef --verbose install Physics-Measure```
@@ -155,3 +156,5 @@ my Length $x = ♎️ '12.5 nm ±0.05';
 #### Help Wanted
 
 Over time I imagine an eco-system of equation parsing / pde plugins and machine calibration matrices - feel free to continue the journey in this direction with a pull request!
+
+Copyright (c) Henley Cloud Consulting Ltd. 2021-2023
