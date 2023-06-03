@@ -1,8 +1,8 @@
-# raku-Physics-Error
-some code to handle physical measurement errors (nothing to do with programming errors!)
-
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![raku-physics-error -> DH](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml)
+
+# raku-Physics-Error
+some code to handle physical measurement errors (nothing to do with programming errors!)
 
 # Instructions
 Installs automatically with```zef --verbose install Physics-Measure```
