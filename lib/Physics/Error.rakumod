@@ -1,5 +1,3 @@
-#unit module Physics::Error:ver<0.1.3>:auth<Steve Roe (librasteve@furnival.net)>;
-
 #viz. https://www.mathsisfun.com/measure/error-measurement.html
 #viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
 #viz. https://en.wikipedia.org/wiki/IEEE_754#Decimal ... IEEE_754 preserves 17 decimal digits for binary64
@@ -18,11 +16,16 @@ class Error is export {
         #Measure $.error attr cleared without defined error value
         return Nil without $error;
 
+        #Stringify percent to avoid circular dependency
         given $error {
             when Real {
                 self.bless(absolute => $error.abs)
             }
             when /^ (<-[%]>*) '%' $/ {
+                my $percent = +"$0";
+                self.bless( absolute => ($percent / 100 * $value).round($round-per) )
+            }
+            when /^ (<-[%]>*) 'percent' $/ {
                 my $percent = +"$0";
                 self.bless( absolute => ($percent / 100 * $value).round($round-per) )
             }

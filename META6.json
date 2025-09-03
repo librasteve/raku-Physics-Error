@@ -1,26 +1,22 @@
 {
-  "name": "Physics::Error",
-  "description": "some code to handle physical measurement errors (nothing to do with programming errors!)",
-  "version": "0.1.3",
-  "perl": "6.d",
-  "authors": [
-    "librasteve"
-  ],
-  "auth": "zef:librasteve",
-  "depends": [],
-  "build-depends": [],
-  "test-depends": [],
-  "provides": {
-    "Physics::Error": "lib/Physics/Error.rakumod"
-  },
-  "resources": [],
-  "license": "Artistic-2.0",
-  "tags": [
-    "Physics",
-    "Measure",
-    "Units",
-    "Error"
-  ],
-  "api": "1",
-  "source-url": "git://github.com/librasteve/raku-Physics-Error.git"
+    "name": "Physics::Error",
+    "description": "Handles physical measurement errors (nothing to do with programming errors!)",
+    "version": "0.1.4",
+    "authors": [
+        "librasteve"
+    ],
+    "auth": "zef:librasteve",
+    "build-depends": [],
+    "provides": {
+        "Physics::Error": "lib/Physics/Error.rakumod"
+    },
+    "license": "Artistic-2.0",
+    "tags": [
+        "Physics",
+        "Measure",
+        "Units",
+        "Error"
+    ],
+    "api": "1",
+    "source-url": "git://github.com/librasteve/raku-Physics-Error.git"
 }
