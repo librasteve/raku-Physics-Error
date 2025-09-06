@@ -1,7 +1,7 @@
 {
     "name": "Physics::Error",
     "description": "Handles physical measurement errors (nothing to do with programming errors!)",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "authors": [
         "librasteve"
     ],
