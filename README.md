@@ -5,14 +5,14 @@
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
 # Instructions
-Installs automatically with```zef --verbose install Physics-Measure```
+Installs automatically with```zef --verbose install Physics-Measure --/test```
 uninstall with, ```zef uninstall Physics::Measure``` and ```zef uninstall Physics::Error```
 
 # Context
 In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 - this gets fairly heavy fairly quickly ... real world physical errors can be non-linear and accelerate rapidly
 - this module is definitively LINEAR ONLY ;-)
-#### this module is not intended for use in mission critical applications
+### this module is _not_ intended for use in mission critical applications
 
 # Synopsis
 Take a look at your keyboard... there's probably a '±' key?
@@ -24,7 +24,7 @@ use Physics::Measure :ALL;
 
 my $x1 = 12.5nm ± 1;                                                    #SI units as raku postfix operators
 my $x2 = Length.new(value => 12.5, units => 'nm', error => '4.3%');     #standard raku .new syntax
-my $x3 = ♎️ '12.5 ft ±0.5';                                              #libra prefix shorthand
+my $x3 = ^<12.5 ft ±0.5>;                                               #caret prefix shorthand
 
 # Error values are included in Measures when output
 say ~$x1;                                       #12.5nm ±4% or 12.5nm ±1
@@ -71,6 +71,7 @@ $Physics::Error::default   = 'absolute';    #default error output [absolute|perc
 $Physics::Error::round-per = 0.001;         #control rounding of percent
 ```
 Two ways for Measure output precision control. These only act on the .Str output rendering and leave the Measure .value and .error.absolute "truth" untouched.
+
 #### Automagic
 This option uses .error.denorm to right shift the error value and align to the mantissa precision of the measure value. The number of significant digits in the error is then used to round the measure value.
 

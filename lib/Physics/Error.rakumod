@@ -83,7 +83,7 @@ class Error is export {
         my $adjust-exp;
         my $error-str;
 
-        #FIXME - what about "cross-terms" (eg. mea has exp, err not and viceverce)
+        # FIXME - what about "cross-terms" (eg. mea has exp, err not and viceversa)
         if $fraction {
             if $err-exp {
                 # case 1: 2.8     ... -10 => 0.0000000028
@@ -101,8 +101,16 @@ class Error is export {
                 $left-pad ~= '0' for ^$exp-offset;
 
                 # ... and assemble with measure exponent
-                my $new-exp = $err-exp == 0 ?? '' !! "e{ $mea-exp }";
-                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ $new-exp }";
+
+                sub new-exp {
+                    given     $err-exp,  $mea-exp {
+                        when   * == 0,     *        { '' }
+                        when   * != 0,     * != 0   { 'e' ~ $mea-exp }
+                        when   * != 0,     * == 0   { '' }
+                    }
+                }
+                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp() }";
+
             } else {
                 # case 2: 54.288  ...  0 => 54.288
                 $adjust-exp = -$fraction.chars;
