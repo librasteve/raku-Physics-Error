@@ -15,7 +15,7 @@ In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_
 ### this module is _not_ intended for use in mission critical applications
 
 # Synopsis
-Take a look at your keyboard... there's probably a '±' key?
+Take a look at your keyboard... there's probably a '±' key? [If not, then you can use the '~' instead]
 
 Physics::Error works with the [Physics::Measure](https://github.com/librasteve/raku-Physics-Measure) and [Physics::Unit](https://github.com/librasteve/raku-Physics-Unit) modules to do this:
 

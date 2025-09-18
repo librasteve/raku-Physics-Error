@@ -30,8 +30,7 @@ class Error is export {
                 self.bless( absolute => ($percent / 100 * $value).round($round-per) )
             }
             default {
-                #Measure $.error attr cleared when not Real or Str with %
-                Nil
+                Nil     #clear Measure $.error attr
             }
         }
     }
