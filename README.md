@@ -4,6 +4,8 @@
 # raku-Physics-Error
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
+Note: The caret prefix ^ can now used as an alternative to the libra prefix ♎️ to ease typing. Also the tilde ~ has been added as an alternative to ± to introduce an Error term.
+
 # Instructions
 Installs automatically with```zef --verbose install Physics-Measure --/test```
 uninstall with, ```zef uninstall Physics::Measure``` and ```zef uninstall Physics::Error```
