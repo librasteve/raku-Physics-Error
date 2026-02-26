@@ -1,6 +1,11 @@
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![raku-physics-error -> DH](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml/badge.svg)](https://github.com/librasteve/raku-Physics-Error/actions/workflows/error-weekly.yaml)
 
+
+***THIS SOFTWARE IS PROVDED "AS IS" WITHOUT WARRANTY OR LIABILITY.***
+
+***THIS SOFTWARE IS NOT INTENDED FOR USE IN MISSION CRITICAL APPLICATIONS***
+
 # raku-Physics-Error
 some code to handle physical measurement errors (nothing to do with programming errors!)
 
@@ -17,7 +22,6 @@ uninstall with, ```zef uninstall Physics::Measure``` and ```zef uninstall Physic
 In wikipedia, the general topic is https://en.wikipedia.org/wiki/Propagation_of_uncertainty
 - this gets fairly heavy fairly quickly ... real world physical errors can be non-linear and accelerate rapidly
 - this module is definitively LINEAR ONLY ;-)
-### this module is _not_ intended for use in mission critical applications
 
 # Synopsis
 Take a look at your keyboard... there's probably a '±' key? [If not, then you can use the '~' instead]
