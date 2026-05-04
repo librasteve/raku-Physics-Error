@@ -1,11 +1,14 @@
 {
     "name": "Physics::Error",
     "description": "Handles physical measurement errors (nothing to do with programming errors!)",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "authors": [
         "librasteve"
     ],
     "auth": "zef:librasteve",
+    "depends": [
+        "FatRatStr"
+    ],
     "build-depends": [],
     "provides": {
         "Physics::Error": "lib/Physics/Error.rakumod"

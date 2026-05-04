@@ -2,14 +2,16 @@
 #viz. https://www.geol.lsu.edu/jlorenzo/geophysics/uncertainties/Uncertaintiespart1.html
 #viz. https://en.wikipedia.org/wiki/IEEE_754#Decimal ... IEEE_754 preserves 17 decimal digits for binary64
 
+use FatRatStr;
+
 our $default = 'absolute';  #set default error format [absolute|percent]
 #our $default = 'percent';
 
 our $round-per = 0.001;     #set rounding of percent for get & set (0.001 == 0.01% )
 
 class Error is export {
-    has Real $.absolute is rw;
-    has Real $!mea-value;
+    has Real() $.absolute is rw;
+    has Real   $!mea-value;
 
     #### Constructor ####
     method new(:$error, :$value) {
@@ -58,7 +60,7 @@ class Error is export {
         self.Str
     }
 
-    sub unpack-sme(Str(Real) $number) {
+    sub unpack-sme(Str() $number) {
         # get sign, mantissa & exponent Str from Int|Rat|Num (Real)
         $number ~~ / (<[-+]>?) (<-[eE]>*) <[eE]>? (.*) /;
         my $sign = $0 // '';
@@ -68,8 +70,12 @@ class Error is export {
         return($sign, $mantissa, $exponent)
     }
     method denorm {
+
+        my $absolute  = $!absolute  ~~ FatRat ?? $!absolute.FatRatStr  !! $!absolute;
+        my $mea-value = $!mea-value ~~ FatRat ?? $!mea-value.FatRatStr !! $!mea-value;
+
         # unpack absolute
-        my (Any, $mantissa, $err-exp) = unpack-sme($!absolute);
+        my (Any, $mantissa, $err-exp) = unpack-sme($absolute);
 
         # get either side of decimal point
         $mantissa ~~ / (<-[.]>*) '.'? (.*) /;
@@ -77,7 +83,7 @@ class Error is export {
         my $fraction = ~$1;
 
         # unpack mea-value exponent
-        my (Any, Any, $mea-exp) = unpack-sme($!mea-value);
+        my (Any, Any, $mea-exp) = unpack-sme($mea-value);
 
         my $adjust-exp;
         my $error-str;
@@ -100,7 +106,6 @@ class Error is export {
                 $left-pad ~= '0' for ^$exp-offset;
 
                 # ... and assemble with measure exponent
-
                 sub new-exp {
                     given     $err-exp,  $mea-exp {
                         when   * == 0,     *        { '' }
@@ -108,6 +113,7 @@ class Error is export {
                         when   * != 0,     * == 0   { '' }
                     }
                 }
+
                 $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp() }";
 
             } else {
@@ -127,9 +133,9 @@ class Error is export {
         my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
         my $round  = +sprintf( <%e>, (10 ** $digits) ); #start with Num to
            $round .= Str;                               #need Str as arg for round()
-           $round  = Nil if $!absolute == 0;            #do not round exact amounts (e.g. constants)
+           $round  = Nil if $!absolute == 0;            #do not round exact amounts
 
-        return( $error-str, $round )
+        return( $error-str, +$round )
     }
 
     #### Maths Ops ####
