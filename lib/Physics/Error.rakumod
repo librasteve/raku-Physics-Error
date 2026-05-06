@@ -11,7 +11,7 @@ our $round-per = 0.001;     #set rounding of percent for get & set (0.001 == 0.0
 
 class Error is export {
     has Real() $.absolute is rw;
-    has Real   $!mea-value;
+    has Real() $!mea-value;
 
     #### Constructor ####
     method new(:$error, :$value) {
@@ -60,21 +60,32 @@ class Error is export {
         self.Str
     }
 
-    sub unpack-sme(Str() $number) {
-        # get sign, mantissa & exponent Str from Int|Rat|Num (Real)
-        $number ~~ / (<[-+]>?) (<-[eE]>*) <[eE]>? (.*) /;
-        my $sign = $0 // '';
-        my $mantissa = $1;
-        my $exponent = +$2;
+    #iamerejh
+    #| general idea is to denormalize (right shift) the error Num to align with the mea(sure) value
+    #|  9.1093837015e-31kg ±0.0000000028e-31, can also be formatted
+    #|  9.1093837015e-31kg    ... value is normalized   (add \n?)
+    #| ±0.0000000028e-31      ... error is denormalized to align
+    #|
+    #| rules:
+    #|  - value is a Real (often a FatRat)
+    #|  - error.absolute is a Real (often a FatRat)
+    #|  - any combination of Real types may be encountered
+    #|  - does not affect the object values
 
-        return($sign, $mantissa, $exponent)
-    }
     method denorm {
+        sub unpack-sme(Str() $number) {
+            # get sign, mantissa & exponent Str from Num|FatRatStr (Real)   ###HMMM do this work for Rat / FatRat
+            $number ~~ / (<[-+]>?) (<-[eE]>*) <[eE]>? (.*) /;
 
-        my $absolute  = $!absolute  ~~ FatRat ?? $!absolute.FatRatStr  !! $!absolute;
-        my $mea-value = $!mea-value ~~ FatRat ?? $!mea-value.FatRatStr !! $!mea-value;
+            my $sign = $0 // '';
+            my $mantissa = $1;
+            my $exponent = +$2;
+
+            return($sign, $mantissa, $exponent)
+        }
 
         # unpack absolute
+        my $absolute  = $!absolute  ~~ FatRat ?? $!absolute.FatRatStr  !! $!absolute;
         my (Any, $mantissa, $err-exp) = unpack-sme($absolute);
 
         # get either side of decimal point
@@ -83,17 +94,20 @@ class Error is export {
         my $fraction = ~$1;
 
         # unpack mea-value exponent
+        my $mea-value = $!mea-value ~~ FatRat ?? $!mea-value.FatRatStr !! $!mea-value;
         my (Any, Any, $mea-exp) = unpack-sme($mea-value);
 
         my $adjust-exp;
         my $error-str;
 
-        # FIXME - what about "cross-terms" (eg. mea has exp, err not and viceversa)
+        # FIXME - what about "cross-terms" (eg. mea has exp, err not and viceversa) HMMM  #iamerejh
         if $fraction {
+            say 47;
             if $err-exp {
-                # case 1: 2.8     ... -10 => 0.0000000028
 
-                # for fraction, count digits eg. x.｢8｣ => -1
+                # case 1: 2.8 ... -10 => 0.0000000028
+
+                # for fraction, count digits eg. x.｢8｣ => -1, x.｢0000000028｣ => -10
                 $adjust-exp = -$fraction.chars;
 
                 # for fraction, denorm to match measure exponent...
@@ -107,21 +121,23 @@ class Error is export {
 
                 # ... and assemble with measure exponent
                 sub new-exp {
-                    given     $err-exp,  $mea-exp {
-                        when   * == 0,     *        { '' }
-                        when   * != 0,     * != 0   { 'e' ~ $mea-exp }
-                        when   * != 0,     * == 0   { '' }
+                    given     $err-exp,  $mea-exp  {
+                        when   * == 0,    *        { '' }
+                        when   * != 0,    * != 0   { 'e' ~ $mea-exp }
+                        when   * != 0,    * == 0   { 'e' ~ $err-exp }   #HMMM fixed #3810001250nm ±0.40020245 !...
                     }
                 }
 
-                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp() }";
+                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp }";
 
             } else {
+                say 48;
                 # case 2: 54.288  ...  0 => 54.288
                 $adjust-exp = -$fraction.chars;
                 $error-str = "{ $integer }.{ $fraction }";
             }
         } else {
+            say 49;
             # for integer, count right zero pad eg. 9000[.] => 3
             $integer ~~ / ('0'*) $ /;
             $adjust-exp = $0.chars;
@@ -129,13 +145,17 @@ class Error is export {
             $error-str = "$mantissa";
         }
 
-        # make round argument
-        my $digits = $adjust-exp + $err-exp - 1;        #lift precision by 10x
-        my $round  = +sprintf( <%e>, (10 ** $digits) ); #start with Num to
-           $round .= Str;                               #need Str as arg for round()
-           $round  = Nil if $!absolute == 0;            #do not round exact amounts
+        say 33, $error-str;
 
-        return( $error-str, +$round )
+        # make round value
+        my $digits = $adjust-exp + $err-exp - 1;    #lift precision by 10x
+
+        my FatRat() $round;
+        $round  = 10 ** $digits;                    #start with FatRat (can over/under-flow)
+        $round .= FatRatStr.Str;                    #need Str as arg for round()
+        $round  = Nil if $!absolute == 0;           #do not round exact amounts
+
+        return( $error-str, +$round );
     }
 
     #### Maths Ops ####
