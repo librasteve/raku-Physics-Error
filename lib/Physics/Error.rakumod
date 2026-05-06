@@ -102,7 +102,6 @@ class Error is export {
 
         # FIXME - what about "cross-terms" (eg. mea has exp, err not and viceversa) HMMM  #iamerejh
         if $fraction {
-            say 47;
             if $err-exp {
 
                 # case 1: 2.8 ... -10 => 0.0000000028
@@ -119,25 +118,29 @@ class Error is export {
                 my $left-pad = '';
                 $left-pad ~= '0' for ^$exp-offset;
 
+                say 47;
+                say $err-exp;
+                say $mea-exp;
+
                 # ... and assemble with measure exponent
+                #| the idea here is
+                #| if $err-exp == 0 iamerejh trying to explain this matrix
                 sub new-exp {
                     given     $err-exp,  $mea-exp  {
-                        when   * == 0,    *        { '' }
-                        when   * != 0,    * != 0   { 'e' ~ $mea-exp }
-                        when   * != 0,    * == 0   { 'e' ~ $err-exp }   #HMMM fixed #3810001250nm ±0.40020245 !...
+                        when   * == 0,    *        { say 1; '' }
+                        when   * != 0,    * != 0   { say 2; 'e' ~ $mea-exp }
+                        when   * != 0,    * == 0   { say 3; 'e' ~ $mea-exp }   #HMMM fixed #3810001250nm ±0.40020245 !...
                     }
                 }
 
                 $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp }";
 
             } else {
-                say 48;
                 # case 2: 54.288  ...  0 => 54.288
                 $adjust-exp = -$fraction.chars;
                 $error-str = "{ $integer }.{ $fraction }";
             }
         } else {
-            say 49;
             # for integer, count right zero pad eg. 9000[.] => 3
             $integer ~~ / ('0'*) $ /;
             $adjust-exp = $0.chars;
@@ -145,17 +148,14 @@ class Error is export {
             $error-str = "$mantissa";
         }
 
-        say 33, $error-str;
-
         # make round value
         my $digits = $adjust-exp + $err-exp - 1;    #lift precision by 10x
 
         my FatRat() $round;
         $round  = 10 ** $digits;                    #start with FatRat (can over/under-flow)
         $round .= FatRatStr.Str;                    #need Str as arg for round()
-        $round  = Nil if $!absolute == 0;           #do not round exact amounts
 
-        return( $error-str, +$round );
+        return( $error-str, $round );
     }
 
     #### Maths Ops ####
