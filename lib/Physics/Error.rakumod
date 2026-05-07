@@ -73,34 +73,23 @@ class Error is export {
     #|  - does not affect the object values
 
     method denorm {
-        sub unpack-sme(Str() $number) {
-            # get sign, mantissa & exponent Str from Num|FatRatStr (Real)   ###HMMM do this work for Rat / FatRat
-            $number ~~ / (<[-+]>?) (<-[eE]>*) <[eE]>? (.*) /;
-
-            my $sign = $0 // '';
-            my $mantissa = $1;
-            my $exponent = +$2;
-
-            return($sign, $mantissa, $exponent)
-        }
 
         # unpack absolute
-        my $absolute  = $!absolute  ~~ FatRat ?? $!absolute.FatRatStr  !! $!absolute;
-        my (Any, $mantissa, $err-exp) = unpack-sme($absolute);
+        my (Any, $mantissa, $err-exp, $integer, $fraction) = $!absolute.FatRatStr.unpack;
 
-        # get either side of decimal point
-        $mantissa ~~ / (<-[.]>*) '.'? (.*) /;
-        my $integer = ~$0;
-        my $fraction = ~$1;
+#        # get either side of decimal point
+#        $mantissa ~~ / (<-[.]>*) '.'? (.*) /;
+#        my $integer = ~$0;
+#        my $fraction = ~$1;
+
+        #iamerejh (add integer / fraction to unpack, separate round and error parts of denorm)
 
         # unpack mea-value exponent
-        my $mea-value = $!mea-value ~~ FatRat ?? $!mea-value.FatRatStr !! $!mea-value;
-        my (Any, Any, $mea-exp) = unpack-sme($mea-value);
+        my (Any, Any, $mea-exp, Any, Any) = $!mea-value.FatRatStr.unpack;
 
         my $adjust-exp;
         my $error-str;
 
-        # FIXME - what about "cross-terms" (eg. mea has exp, err not and viceversa) HMMM  #iamerejh
         if $fraction {
             if $err-exp {
 
@@ -118,18 +107,12 @@ class Error is export {
                 my $left-pad = '';
                 $left-pad ~= '0' for ^$exp-offset;
 
-                say 47;
-                say $err-exp;
-                say $mea-exp;
-
                 # ... and assemble with measure exponent
-                #| the idea here is
-                #| if $err-exp == 0 iamerejh trying to explain this matrix
                 sub new-exp {
                     given     $err-exp,  $mea-exp  {
-                        when   * == 0,    *        { say 1; '' }
-                        when   * != 0,    * != 0   { say 2; 'e' ~ $mea-exp }
-                        when   * != 0,    * == 0   { say 3; 'e' ~ $mea-exp }   #HMMM fixed #3810001250nm ±0.40020245 !...
+                        when   * == 0,    *        { '' }
+                        when   * != 0,    * != 0   { 'e' ~ $mea-exp }
+                        when   * != 0,    * == 0   { '' }
                     }
                 }
 
