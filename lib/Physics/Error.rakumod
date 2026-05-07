@@ -72,31 +72,18 @@ class Error is export {
     #|  - any combination of Real types may be encountered
     #|  - does not affect the object values
 
-    method denorm {
+    #| denormalized error for use in .Str output
+    method denorm(-->Str) {
 
-        # unpack absolute
-        my (Any, $mantissa, $err-exp, $integer, $fraction) = $!absolute.FatRatStr.unpack;
+        my ($err-exp, $mantissa, $integer, $fraction)
+                    = $!absolute.FatRatStr.unpack<exponent mantissa integer fraction>;
+        my $mea-exp = $!mea-value.FatRatStr.unpack<exponent>;
 
-#        # get either side of decimal point
-#        $mantissa ~~ / (<-[.]>*) '.'? (.*) /;
-#        my $integer = ~$0;
-#        my $fraction = ~$1;
-
-        #iamerejh (add integer / fraction to unpack, separate round and error parts of denorm)
-
-        # unpack mea-value exponent
-        my (Any, Any, $mea-exp, Any, Any) = $!mea-value.FatRatStr.unpack;
-
-        my $adjust-exp;
-        my $error-str;
+        my Str $error;
 
         if $fraction {
             if $err-exp {
-
                 # case 1: 2.8 ... -10 => 0.0000000028
-
-                # for fraction, count digits eg. x.｢8｣ => -1, x.｢0000000028｣ => -10
-                $adjust-exp = -$fraction.chars;
 
                 # for fraction, denorm to match measure exponent...
                 $integer = '' if $integer == '0';
@@ -116,29 +103,40 @@ class Error is export {
                     }
                 }
 
-                $error-str = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp }";
+                $error = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp }";
 
             } else {
                 # case 2: 54.288  ...  0 => 54.288
-                $adjust-exp = -$fraction.chars;
-                $error-str = "{ $integer }.{ $fraction }";
+                $error = "{ $integer }.{ $fraction }";
             }
+        } else {
+             $error = "$mantissa";
+        }
+
+        return( $error );
+    }
+
+    #| scale (Num literal Str) for round($scale)
+    method scale(--> Str()) {
+        my ($err-exp, $integer, $fraction) = $!absolute.FatRatStr.unpack<exponent integer fraction>;
+
+        my $adjust-exp;
+        if $fraction {
+            # for fraction, count digits eg. x.｢8｣ => -1, x.｢0000000028｣ => -10
+            $adjust-exp = -$fraction.chars;
         } else {
             # for integer, count right zero pad eg. 9000[.] => 3
             $integer ~~ / ('0'*) $ /;
             $adjust-exp = $0.chars;
-
-            $error-str = "$mantissa";
         }
 
-        # make round value
         my $digits = $adjust-exp + $err-exp - 1;    #lift precision by 10x
 
-        my FatRat() $round;
-        $round  = 10 ** $digits;                    #start with FatRat (can over/under-flow)
-        $round .= FatRatStr.Str;                    #need Str as arg for round()
+        my FatRat() $scale;                         #make FatRat (can over/under-flow)
+        $scale  = 10 ** $digits;
+        $scale .= FatRatStr;                        #avoids infecting precision
 
-        return( $error-str, $round );
+        return( $scale );
     }
 
     #### Maths Ops ####
