@@ -60,7 +60,7 @@ class Error is export {
         self.Str
     }
 
-    #iamerejh
+    #iamerejh  HMMM
     #| general idea is to denormalize (right shift) the error Num to align with the mea(sure) value
     #|  9.1093837015e-31kg ±0.0000000028e-31, can also be formatted
     #|  9.1093837015e-31kg    ... value is normalized   (add \n?)
@@ -72,9 +72,8 @@ class Error is export {
     #|  - any combination of Real types may be encountered
     #|  - does not affect the object values
 
-    #| denormalized error for use in .Str output
+    #| denormalize error for use in .Str output
     method denorm(-->Str) {
-
         my ($err-exp, $mantissa, $integer, $fraction)
                     = $!absolute.FatRatStr.unpack<exponent mantissa integer fraction>;
         my $mea-exp = $!mea-value.FatRatStr.unpack<exponent>;
@@ -95,7 +94,7 @@ class Error is export {
                 $left-pad ~= '0' for ^$exp-offset;
 
                 # ... and assemble with measure exponent
-                sub new-exp {
+                sub new-exp {                   #HMMM - test these
                     given     $err-exp,  $mea-exp  {
                         when   * == 0,    *        { '' }
                         when   * != 0,    * != 0   { 'e' ~ $mea-exp }
@@ -104,13 +103,12 @@ class Error is export {
                 }
 
                 $error = "0.{ $left-pad }{ $integer }{ $fraction }{ new-exp }";
-
             } else {
                 # case 2: 54.288  ...  0 => 54.288
                 $error = "{ $integer }.{ $fraction }";
             }
         } else {
-             $error = "$mantissa";
+             $error = "{$mantissa * 10**$err-exp}";
         }
 
         return( $error );
@@ -130,11 +128,11 @@ class Error is export {
             $adjust-exp = $0.chars;
         }
 
-        my $digits = $adjust-exp + $err-exp - 1;    #lift precision by 10x
+        my $digits = $adjust-exp + $err-exp - 1;    #arbitrarily lift precision by 10x
 
-        my FatRat() $scale;                         #make FatRat (can over/under-flow)
+        my FatRat() $scale;                         #coerce to FatRat (a Num would infect the precision)
         $scale  = 10 ** $digits;
-        $scale .= FatRatStr;                        #avoids infecting precision
+        $scale .= FatRatStr;
 
         return( $scale );
     }
