@@ -167,5 +167,7 @@ my Length $x = ♎️ '12.5 nm ±0.05';
 
 Over time I imagine an eco-system of equation parsing / pde plugins and machine calibration matrices - feel free to continue the journey in this direction with a pull request!
 
+
 Copyright (c) Henley Cloud Consulting Ltd. 2025
+
 Copyright (c) Stephen Roe 2026
