@@ -60,17 +60,20 @@ class Error is export {
         self.Str
     }
 
-    #iamerejh  HMMM
+    #| On .denorm and .scale design
+    #|
     #| general idea is to denormalize (right shift) the error Num to align with the mea(sure) value
     #|  9.1093837015e-31kg ±0.0000000028e-31, can also be formatted
     #|  9.1093837015e-31kg    ... value is normalized   (add \n?)
     #| ±0.0000000028e-31      ... error is denormalized to align
     #|
-    #| rules:
-    #|  - value is a Real (often a FatRat)
-    #|  - error.absolute is a Real (often a FatRat)
-    #|  - any combination of Real types may be encountered
-    #|  - does not affect the object values
+    #| rules: - value & error are coerced to FatRatStr
+    #| - value is normalized
+    #| - value is rounded to LSP of error
+    #| - error is denormalized / aligned
+    #| - scale is coerced to a FatRatStr to avoid infection
+    #| - round operation is performed by FatRatStr.round for consistency
+    #| - modest values -- exclude all 1e-4 < * < 1e4 => Rat
 
     #| denormalize error for use in .Str output
     method denorm(-->Str) {
@@ -94,7 +97,7 @@ class Error is export {
                 $left-pad ~= '0' for ^$exp-offset;
 
                 # ... and assemble with measure exponent
-                sub new-exp {                   #HMMM - test these
+                sub new-exp {
                     given     $err-exp,  $mea-exp  {
                         when   * == 0,    *        { '' }
                         when   * != 0,    * != 0   { 'e' ~ $mea-exp }
